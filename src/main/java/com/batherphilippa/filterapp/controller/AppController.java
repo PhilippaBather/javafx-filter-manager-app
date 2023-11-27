@@ -1,4 +1,4 @@
-package com.philippabather.controller;
+package com.batherphilippa.filterapp.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
