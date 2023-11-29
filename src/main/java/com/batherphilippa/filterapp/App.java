@@ -6,7 +6,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import static com.batherphilippa.filterapp.constants.Constants.PATH;
+
 public class App extends Application {
+
     public static void main(String[] args) { launch(); }
 
     @Override
@@ -23,7 +26,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/com/batherphilippa/filterapp/main.fxml"));
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource(PATH + "main.fxml"));
         loader.setController(new AppController());
         Scene scene = new Scene(loader.load());
         stage.setScene(scene);
