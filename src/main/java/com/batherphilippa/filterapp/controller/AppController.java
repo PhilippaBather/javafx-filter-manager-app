@@ -36,27 +36,24 @@ public class AppController implements Initializable {
 
     @FXML
     public void handleFileSelection(ActionEvent event) {
-
         if (radBtnOneFile.isSelected()) {
+            // un archivo elegido
             File file = FileUtils.getFileFromChooser(radBtnOneFile);
-            File newFile = FileUtils.createFile(file);
-            launchImageController(newFile);
+            launchImageController(file);
         } else {
-            System.out.println("Multiples are to be chosen.");
+            // multiples archivos elegidos
             List<File> files = FileUtils.getMultipleFilesFromChooser(radBtnMultipleFiles);
             for (File file:
                  files) {
-                File newFile = FileUtils.createFile(file);
-                launchImageController(newFile);
+                launchImageController(file);
             }
         }
     }
 
-    private FXMLLoader launchImageController(File file) {
+    private void launchImageController(File file) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(PATH + "image_progress_pane.fxml"));
         loader.setController(new ImageController(file));
         openImageTab(loader, file);
-        return loader;
     }
 
     private void openImageTab(FXMLLoader loader, File file) {
