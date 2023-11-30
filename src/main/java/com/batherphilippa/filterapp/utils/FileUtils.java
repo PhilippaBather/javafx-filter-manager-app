@@ -5,8 +5,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
+
+import static com.batherphilippa.filterapp.constants.Constants.FILE_PATH;
+import static com.batherphilippa.filterapp.constants.Constants.FILE_TYPE_PNG;
 
 public class FileUtils {
 
@@ -22,13 +24,13 @@ public class FileUtils {
         return fileChooser.showOpenMultipleDialog(stage);
     }
 
-    public static File createFile(File file) {
-        File newFile = new File(file.getName());
-        try {
-            newFile.createNewFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return newFile;
+    public static String setFileNameAndPath(File file, String suffix) {
+        String name = file.getName();
+        String filename = name.substring(0, name.lastIndexOf("."));
+        return new StringBuilder()
+                    .append(FILE_PATH)
+                    .append(filename)
+                    .append(suffix)
+                    .append(FILE_TYPE_PNG).toString();
     }
 }
