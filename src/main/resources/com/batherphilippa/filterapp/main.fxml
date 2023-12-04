@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: rgba(242, 233, 245, 0.5);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text fill="#400772" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: BOLD; -fx-font-size: 24px; -fx-font-family: Verdana, Geneva, sans-serif;" text="Filter Manager" textAlignment="CENTER" wrappingWidth="600.0" />
+      <Label layoutX="44.0" layoutY="83.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Elige archivos" textFill="#400772" />
+      <RadioButton fx:id="rbtnOneFile" layoutX="44.0" layoutY="117.0" mnemonicParsing="false" onAction="#selectFile" prefHeight="17.0" prefWidth="95.0" text="Un archivo" textFill="#400772">
+         <toggleGroup>
+            <ToggleGroup fx:id="fileSelection" />
+         </toggleGroup></RadioButton>
+      <RadioButton fx:id="rbtnMultipleFiles" layoutX="139.0" layoutY="117.0" mnemonicParsing="false" onAction="#selectFile" prefHeight="17.0" prefWidth="135.0" text="Archivos multiples" textFill="#400772" toggleGroup="$fileSelection" />
+      <TabPane fx:id="tpFilterTabManager" layoutX="35.0" layoutY="163.0" prefHeight="200.0" prefWidth="541.0" tabClosingPolicy="UNAVAILABLE" />
+   </children>
+</AnchorPane>
