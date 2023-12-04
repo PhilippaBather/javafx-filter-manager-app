@@ -13,6 +13,7 @@ import javafx.scene.control.ProgressBar;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.batherphilippa.filterapp.constants.Constants.FILE_NAME_SUFFIX_TEMP;
@@ -20,7 +21,8 @@ import static com.batherphilippa.filterapp.constants.Constants.FILE_NAME_SUFFIX_
 public class ImageController implements Initializable {
 
     private File file;
-    private FilterTask filterTask; // TODO - refactor
+    private List<String> selectedFilters;
+    private FilterTask filterTask;
 
     @FXML
     private ProgressBar pbFilter;
@@ -31,8 +33,10 @@ public class ImageController implements Initializable {
     @FXML
     private Button btCancel;
 
-    public ImageController(File file) {
+
+    public ImageController(File file, List<String> selectedFilters) {
         this.file = file;
+        this.selectedFilters = selectedFilters;
     }
 
     @Override
