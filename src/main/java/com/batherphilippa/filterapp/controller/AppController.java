@@ -39,13 +39,17 @@ public class AppController implements Initializable {
         if (radBtnOneFile.isSelected()) {
             // un archivo elegido
             File file = FileUtils.getFileFromChooser(radBtnOneFile);
-            launchImageController(file);
+            if (file != null) {
+                launchImageController(file);
+            }
         } else {
             // multiples archivos elegidos
             List<File> files = FileUtils.getMultipleFilesFromChooser(radBtnMultipleFiles);
-            for (File file:
-                 files) {
-                launchImageController(file);
+            if (!files.isEmpty()) {
+                for (File file:
+                     files) {
+                    launchImageController(file);
+                }
             }
         }
     }
