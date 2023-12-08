@@ -13,7 +13,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.batherphilippa.filterapp.constants.Constants.FILE_NAME_SUFFIX_TEMP;
+import static com.batherphilippa.filterapp.constants.Constants.IMAGE_FILE_NAME_SUFFIX_TEMP;
 
 public class ImageController implements Initializable {
 
@@ -40,8 +40,7 @@ public class ImageController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println("In Image Controller...");
-        String newName = FileUtils.setFileNameAndPath(file, FILE_NAME_SUFFIX_TEMP);
+        String newName = FileUtils.setFileNameAndPath(file, IMAGE_FILE_NAME_SUFFIX_TEMP);
 
         File tempFile = new File(newName);
         filterTask = new FilterTask(file, tempFile, selectedFilters);
