@@ -7,20 +7,20 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-// TODO - comments in Spanish
-// TODO - mechanism to handle multiple filter selection
+import static com.batherphilippa.filterapp.filter.FilterType.*;
 
 public class FilterTask extends Task<Integer> {
 
     private File file;
     private File tempFile;
+    private List<String> selectedFilters;
 
-    public FilterTask(File file, File tempFile) {
+    public FilterTask(File file, File tempFile, List<String> selectedFilters) {
         this.file = file;
         this.tempFile = tempFile;
+        this.selectedFilters = selectedFilters;
     }
 
     @Override
@@ -30,6 +30,7 @@ public class FilterTask extends Task<Integer> {
             bufferedImage = ImageIO.read(file);
             applyFilter(bufferedImage);
             ImageIO.write(bufferedImage, "png", tempFile);
+            System.out.println("In call method");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -37,15 +38,18 @@ public class FilterTask extends Task<Integer> {
     }
 
     private BufferedImage applyFilter(BufferedImage bufferedImage) {
-        // TODO - add param to accept array of filters to apply
-        // TODO - do-while loop
-        // TODO - array containing filters to contain Enum of filter type not Strings
-        // TODO - handle image saving etc for multiple filter application
 
-//        greyScaleImage(bufferedImage);
-//        invertImageColor(bufferedImage);
-//        increaseImageBrightness(bufferedImage);
-        blurImage(bufferedImage);
+        int index = 0;
+        do {
+            switch (selectedFilters.get(index)) {
+                case GREY_SCALE -> greyScaleImage(bufferedImage);
+                case COLOR_INVERSION -> invertImageColor(bufferedImage);
+                case INCREASED_BRIGHTNESS -> increaseImageBrightness(bufferedImage);
+                case BLUR -> blurImage(bufferedImage);
+                default -> System.out.println("Filter not recognised");
+            }
+            index++;
+        } while (index < selectedFilters.size());
 
         return bufferedImage;
     }
@@ -58,21 +62,26 @@ public class FilterTask extends Task<Integer> {
             for (int i = 0; i < bufferedImage.getHeight(); i++) {
                 Thread.sleep(5);
                 for (int j = 0; j < bufferedImage.getWidth(); j++) {
+
                     FilterUtils.setGreyScale(bufferedImage, i, j);
 
                     progress = totalRead / totalSize;
                     updateProgress(progress, 1);
-                    updateMessage(Math.round(100 * progress) + "%");
+
+                    String msg = String.format("%s: ", GREY_SCALE);
+                    updateMessage(msg + Math.round(100 * progress) + "%");
+
                     totalRead = (i + 1) * (j + 1);
                 }
             }
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         }
-        updateMessage("100%");
+        updateMessage(GREY_SCALE + ": 100%");
     }
 
     private void invertImageColor(BufferedImage bufferedImage) {
+
         double progress;
         double totalSize = bufferedImage.getHeight() * bufferedImage.getWidth();
         double totalRead = 0d;
@@ -84,14 +93,17 @@ public class FilterTask extends Task<Integer> {
 
                     progress = totalRead / totalSize;
                     updateProgress(progress, 1);
-                    updateMessage(Math.round(100 * progress) + "%");
+
+                    String msg = String.format("%s: ", COLOR_INVERSION);
+                    updateMessage(msg + Math.round(100 * progress) + "%");
+
                     totalRead = (i + 1) * (j + 1);
                 }
             }
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         }
-        updateMessage("100%");
+        updateMessage(COLOR_INVERSION + ": 100%");
     }
 
     private void increaseImageBrightness(BufferedImage bufferedImage) {
@@ -106,14 +118,16 @@ public class FilterTask extends Task<Integer> {
 
                     progress = totalRead / totalSize;
                     updateProgress(progress, 1);
-                    updateMessage(Math.round(100 * progress) + "%");
+
+                    String msg = String.format("%s: ", INCREASED_BRIGHTNESS);
+                    updateMessage(msg + Math.round(100 * progress) + "%");
                     totalRead = (i + 1) * (j + 1);
                 }
             }
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         }
-        updateMessage("100%");
+        updateMessage(INCREASED_BRIGHTNESS + ": 100%");
     }
 
     private void blurImage(BufferedImage bufferedImage) {
@@ -129,6 +143,8 @@ public class FilterTask extends Task<Integer> {
                     // TODO - resolve problem with the progress bar
                     progress = totalRead / totalSize;
                     updateProgress(progress, 1);
+
+                    String msg = String.format("%s: ", BLUR);
                     updateMessage(Math.round(100 * progress) + "%");
                     totalRead = (y + 1) * (x + 1);
                 }
@@ -136,7 +152,8 @@ public class FilterTask extends Task<Integer> {
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         }
-        updateMessage("100%");
+        updateMessage(BLUR + ": 100%");
     }
+
 }
 
