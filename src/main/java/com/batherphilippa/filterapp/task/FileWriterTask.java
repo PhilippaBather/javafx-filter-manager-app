@@ -35,7 +35,7 @@ public class FileWriterTask extends Task<Integer> {
         if (hasFile) {
             writeToLog();
         } else {
-            logFile = FileUtils.returnNewFile(FILE_PATH, FILE_NAME_LOG, FILE_TYPE_TXT);
+            logFile = FileUtils.returnNewFile(IMAGE_FILE_PATH, LOG_FILE_NAME, LOG_FILE_TYPE_TXT);
             boolean isCreated = logFile.createNewFile();
             if (isCreated) {
                 writeToLog();
@@ -50,7 +50,7 @@ public class FileWriterTask extends Task<Integer> {
     }
 
     private boolean checkFileExists() {
-        Path path = Paths.get(FILE_PATH + "log.txt");
+        Path path = Paths.get(IMAGE_FILE_PATH + LOG_FILE_NAME + LOG_FILE_TYPE_TXT);
         return Files.exists(path);
     }
 
@@ -59,7 +59,7 @@ public class FileWriterTask extends Task<Integer> {
         try {
             Thread.sleep(10);
             Files.write(
-                    Paths.get(FILE_PATH + FILE_NAME_LOG + FILE_TYPE_TXT),
+                    Paths.get(IMAGE_FILE_PATH + LOG_FILE_NAME + LOG_FILE_TYPE_TXT),
                     fileDetails.getBytes(),
                     StandardOpenOption.APPEND);
         } catch (IOException | InterruptedException e) {
@@ -71,7 +71,7 @@ public class FileWriterTask extends Task<Integer> {
         String timestamp = LocalDateTime.now().toString();
 
         String origFileDetails = String.format("\nArchivo original: %s; path: %s", file.getName(), file.getPath());
-        String filteredFileDetails = String.format("\nVersión modificada: %s; path: %s", file.getName(), file.getPath());
+        String filteredFileDetails = String.format("\nVersión modificada: %s; path: %s", tempFile.getName(), tempFile.getPath());
 
         StringBuilder filtersApplied = new StringBuilder().append("\nFiltros aplicados:\n\t");
         for (String filter:
@@ -81,7 +81,6 @@ public class FileWriterTask extends Task<Integer> {
 
         return new StringBuilder(timestamp)
                 .append(origFileDetails)
-                .append(filteredFileDetails)
                 .append(filteredFileDetails)
                 .append(filtersApplied)
                 .append("\n").toString();
