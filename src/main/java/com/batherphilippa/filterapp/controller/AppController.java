@@ -1,6 +1,7 @@
 package com.batherphilippa.filterapp.controller;
 
 import com.batherphilippa.filterapp.utils.FileUtils;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,6 +22,18 @@ import static com.batherphilippa.filterapp.constants.Constants.PATH;
 import static com.batherphilippa.filterapp.filter.FilterType.*;
 
 public class AppController implements Initializable {
+
+    @FXML
+    private Menu menuSettings;
+
+    @FXML
+    private MenuItem menuItemSelectPath;
+
+    @FXML
+    private MenuItem menuItemLogHistory;
+
+    @FXML
+    private MenuItem menuItemCloseApp;
 
     @FXML
     private Button applyFilters;
@@ -73,6 +86,22 @@ public class AppController implements Initializable {
         }
     }
 
+    // menu items
+    @FXML
+    void closeApp(ActionEvent event) {
+        Platform.exit();
+    }
+
+    @FXML
+    void goToSelectPathView(ActionEvent event) {
+        System.out.println("Menu item select path view clicked");
+    }
+
+    @FXML
+    void openLogHistoryFile(ActionEvent event) {
+        System.out.println("Menu item open log history clicked.");
+    }
+
     @FXML
     private void applyFilters() {
         List<String> selectedItems = lvFilterSelection.getSelectionModel().getSelectedItems();
@@ -120,4 +149,5 @@ public class AppController implements Initializable {
         imageController.setTab(tab); // pasa el tab a la instancia de FilterTask
         tpFilterTabManager.getTabs().add(tab);
     }
+
 }

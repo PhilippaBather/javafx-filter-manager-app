@@ -4,9 +4,20 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="696.0" style="-fx-background-color: rgba(242, 233, 245, 0.5);" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="482.0" prefWidth="696.0" style="-fx-background-color: rgba(242, 233, 245, 0.5);" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Text fill="#400772" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: BOLD; -fx-font-size: 24px; -fx-font-family: Verdana, Geneva, sans-serif;" text="Filter Manager" textAlignment="CENTER" wrappingWidth="696.0" />
+      <MenuBar>
+        <menus>
+          <Menu fx:id="menusettings" mnemonicParsing="false" text="Settings">
+            <items>
+              <MenuItem fx:id="menuItemSelectPath" mnemonicParsing="false" onAction="#goToSelectPathView" text="Elige Path" />
+                  <MenuItem fx:id="menuItemLogHistory" mnemonicParsing="false" onAction="#openLogHistoryFile" text="Historial" />
+                  <MenuItem fx:id="menuItemCloseApp" mnemonicParsing="false" onAction="#closeApp" text="Cerrar App" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Text fill="#400772" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: BOLD; -fx-font-size: 24px; -fx-font-family: Verdana, Geneva, sans-serif;" text="Filter Manager" textAlignment="CENTER" wrappingWidth="696.0" />
       <Label layoutX="44.0" layoutY="83.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Elige archivos" textFill="#400772" />
       <RadioButton fx:id="radBtnOneFile" layoutX="44.0" layoutY="117.0" mnemonicParsing="false" onAction="#handleFileSelection" prefHeight="17.0" prefWidth="95.0" text="Un archivo" textFill="#400772">
          <toggleGroup>
@@ -14,8 +25,8 @@
          </toggleGroup></RadioButton>
       <RadioButton fx:id="radBtnMultipleFiles" layoutX="139.0" layoutY="117.0" mnemonicParsing="false" onAction="#handleFileSelection" prefHeight="17.0" prefWidth="135.0" text="Archivos multiples" textFill="#400772" toggleGroup="$fileSelection" />
       <Label layoutX="332.0" layoutY="83.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Elige Filtro(s)" textFill="#400772" />
-      <ListView fx:id="lvFilterSelection" layoutX="458.0" layoutY="83.0" prefHeight="200.0" prefWidth="200.0" />
-      <TabPane fx:id="tpFilterTabManager" layoutX="35.0" layoutY="163.0" prefHeight="200.0" prefWidth="541.0" tabClosingPolicy="UNAVAILABLE" />
+      <ListView fx:id="lvFilterSelection" layoutX="458.0" layoutY="83.0" prefHeight="96.0" prefWidth="200.0" />
+      <TabPane fx:id="tpFilterTabManager" layoutX="44.0" layoutY="208.0" prefHeight="200.0" prefWidth="541.0" tabClosingPolicy="UNAVAILABLE" />
       <Button fx:id="btnApplyFilters" layoutX="332.0" layoutY="113.0" mnemonicParsing="false" onAction="#applyFilters" text="Aplica Filtros" />
    </children>
 </AnchorPane>
