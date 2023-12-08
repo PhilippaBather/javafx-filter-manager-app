@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import static com.batherphilippa.filterapp.constants.Constants.PATH;
+import static com.batherphilippa.filterapp.constants.Constants.FXML_FILE_PATH;
 
 public class App extends Application {
 
@@ -26,7 +26,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource(PATH + "main.fxml"));
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource(FXML_FILE_PATH + "main.fxml"));
         loader.setController(new AppController());
         Scene scene = new Scene(loader.load());
         stage.setScene(scene);
