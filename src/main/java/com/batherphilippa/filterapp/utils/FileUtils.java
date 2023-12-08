@@ -41,4 +41,13 @@ public class FileUtils {
                     .append(suffix)
                     .append(IMAGE_FILE_TYPE_PNG).toString();
     }
+
+    public static File returnNewFile(String filePath, String filename, String fileType) {
+        String newFilenameWithPath = new StringBuilder()
+                .append(filePath)
+                .append(filename)
+                .append(fileType).toString();
+
+        return new File(newFilenameWithPath);
+    }
 }
