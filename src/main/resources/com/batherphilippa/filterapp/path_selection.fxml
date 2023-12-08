@@ -11,7 +11,7 @@
       <Text layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Path Selector" textAlignment="CENTER" wrappingWidth="600.0" />
       <Text layoutX="38.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Los archivos están guardados en el Path \Pictures\FilteredImages\ por defecto." />
       <Text layoutX="38.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Elige el destino de Path:" />
-      <RadioButton fx:id="rdBtnDefaultPath" layoutX="38.0" layoutY="132.0" mnemonicParsing="false" onAction="#handlePathSelection" selected="true" text="Path por defecto">
+      <RadioButton fx:id="radBtnDefaultPath" layoutX="38.0" layoutY="132.0" mnemonicParsing="false" onAction="#handlePathSelection" selected="true" text="Path por defecto">
          <toggleGroup>
             <ToggleGroup fx:id="tgGrpPathSelection" />
          </toggleGroup>
