@@ -8,7 +8,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +21,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.batherphilippa.filterapp.constants.Constants.PATH;
+import static com.batherphilippa.filterapp.constants.Constants.FXML_FILE_PATH;
 import static com.batherphilippa.filterapp.filter.FilterType.*;
 
 public class AppController implements Initializable {
@@ -67,7 +70,7 @@ public class AppController implements Initializable {
     }
 
     @FXML
-    public void handleFileSelection(ActionEvent event) throws IOException {
+    public void handleFileSelection(ActionEvent event) {
         if (radBtnOneFile.isSelected()) {
             // un archivo elegido
             File file = FileUtils.getFileFromChooser(radBtnOneFile);
@@ -93,8 +96,14 @@ public class AppController implements Initializable {
     }
 
     @FXML
-    void goToSelectPathView(ActionEvent event) {
-        System.out.println("Menu item select path view clicked");
+    void goToSelectPathView(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource(FXML_FILE_PATH + "path_selection.fxml"));
+        loader.setController(new PathSelectionController());
+        Scene scene = new Scene(loader.load());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
     }
 
     @FXML
@@ -133,7 +142,7 @@ public class AppController implements Initializable {
     }
 
     private void launchImageController(File file, List<String> selectedFilters) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(PATH + "image_progress_pane.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_FILE_PATH + "progress_pane.fxml"));
         ImageController imageController = new ImageController(file, selectedFilters);
         loader.setController(imageController);
         openImageTab(loader, file, imageController);
