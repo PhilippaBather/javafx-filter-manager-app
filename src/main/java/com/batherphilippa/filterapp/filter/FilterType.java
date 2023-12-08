@@ -1,6 +1,6 @@
 package com.batherphilippa.filterapp.filter;
 
-public class FilterTypes {
+public class FilterType {
 
     public static final String GREY_SCALE = "Escala de Grises";
     public static final String COLOR_INVERSION = "Inversión de Color";
