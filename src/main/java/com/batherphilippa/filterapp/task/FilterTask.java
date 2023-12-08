@@ -42,7 +42,6 @@ public class FilterTask extends Task<Integer> {
     @Override
     protected void succeeded() {
         super.succeeded();
-        // TODO - buffered file as a field so as to access info re changed file
         fileWriterTask = new FileWriterTask(file, tempFile, selectedFilters);
         new Thread(fileWriterTask).start();
     }
