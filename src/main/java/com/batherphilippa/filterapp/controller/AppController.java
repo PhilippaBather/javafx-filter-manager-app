@@ -12,11 +12,13 @@ import javafx.scene.control.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.batherphilippa.filterapp.constants.Constants.PATH;
+import static com.batherphilippa.filterapp.filter.FilterType.*;
 
 public class AppController implements Initializable {
 
@@ -38,16 +40,17 @@ public class AppController implements Initializable {
     @FXML
     private ListView<String> lvFilterSelection;
 
-    private ObservableList<String> filterOptions = FXCollections.observableArrayList("Escala de Grises",
-            "Inversión de Color", "Aumento de Brillo", "Difuminado de la Imagen");
+    private ObservableList<String> filterOptions = FXCollections.observableArrayList(GREY_SCALE,
+            COLOR_INVERSION, INCREASED_BRIGHTNESS, BLUR);
+    private List<File> files;
 
-    private List<File> files = new ArrayList<>();
+    private Tab tab;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println("App controller initialised...");
         lvFilterSelection.setItems(filterOptions);
         lvFilterSelection.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        tpFilterTabManager.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
     }
 
     @FXML
@@ -56,11 +59,17 @@ public class AppController implements Initializable {
             // un archivo elegido
             File file = FileUtils.getFileFromChooser(radBtnOneFile);
             if (file != null) {
+                // para modificar la lista de archivos de forma concurrente
+                files = new CopyOnWriteArrayList<>();
                 files.add(file);
             }
         } else {
             // multiples archivos elegidos
-            files = FileUtils.getMultipleFilesFromChooser(radBtnMultipleFiles);
+            List<File> tempFiles = FileUtils.getMultipleFilesFromChooser(radBtnMultipleFiles);
+            if (tempFiles != null) {
+                // para modificar la lista de archivos de forma concurrente
+                files = new CopyOnWriteArrayList<>(tempFiles);
+            }
         }
     }
 
@@ -68,27 +77,47 @@ public class AppController implements Initializable {
     private void applyFilters() {
         List<String> selectedItems = lvFilterSelection.getSelectionModel().getSelectedItems();
 
+        if(selectedItems.size() == 0) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("Elige filtros para continuar.");
+            alert.show();
+            return;
+        }
+
+        // CopyOnWriteArrayList es Thread Safe
+        // permite eliminar elementos de la list usando un Iterator de forma concurrente
+        Iterator<File> fileIterator = files.listIterator();
         if (files != null) {
-            for (File file :
-                    files) {
-                launchImageController(file, selectedItems);
+            while(fileIterator.hasNext()) {
+                File file = fileIterator.next();
+                try {
+                    launchImageController(file, selectedItems);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                files.remove(file);
             }
         }
+
+        // de-seleccionar el toggle button elegido
+        fileSelection.getSelectedToggle().setSelected(false);
     }
 
-    private void launchImageController(File file, List<String> selectedFilters) {
+    private void launchImageController(File file, List<String> selectedFilters) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(PATH + "image_progress_pane.fxml"));
-        loader.setController(new ImageController(file, selectedFilters));
-        openImageTab(loader, file);
+        ImageController imageController = new ImageController(file, selectedFilters);
+        loader.setController(imageController);
+        openImageTab(loader, file, imageController);
     }
 
-    private void openImageTab(FXMLLoader loader, File file) {
+    private void openImageTab(FXMLLoader loader, File file, ImageController imageController) {
         String tabName = file.getName();
-
         try {
-            tpFilterTabManager.getTabs().add(new Tab(tabName, loader.load()));
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+            tab = new Tab(tabName, loader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        imageController.setTab(tab); // pasa el tab a la instancia de FilterTask
+        tpFilterTabManager.getTabs().add(tab);
     }
 }
