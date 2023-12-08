@@ -6,10 +6,7 @@ import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 
 import java.io.File;
 import java.net.URL;
@@ -32,23 +29,32 @@ public class ImageController implements Initializable {
 
     @FXML
     private Button btCancel;
+    private Tab tab;
 
 
     public ImageController(File file, List<String> selectedFilters) {
         this.file = file;
         this.selectedFilters = selectedFilters;
+        this.tab = new Tab();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("In Image Controller...");
         String newName = FileUtils.setFileNameAndPath(file, FILE_NAME_SUFFIX_TEMP);
+
         File tempFile = new File(newName);
-        filterTask = new FilterTask(file, tempFile);
+        filterTask = new FilterTask(file, tempFile, selectedFilters);
+
         filterTask.stateProperty().addListener(((observableValue, state, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("Filtro aplicado.");
+                alert.setContentText(String.format("Filtro aplicado a una copia de %s.", file.getName()));
+                alert.show();
+            }
+            if (newState == Worker.State.CANCELLED) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText(String.format("Filtro cancelado para el archivo %s.", file.getName()));
                 alert.show();
             }
         }));
@@ -57,13 +63,28 @@ public class ImageController implements Initializable {
         filterTask.messageProperty().addListener(((observableValue, msg, newMsg) -> {
             lbFilterStatus.setText(newMsg);
         }));
+
         // actualiza el estado de la barra de progreso
         filterTask.progressProperty().addListener((observableValue, number, t1) -> pbFilter.setProgress(t1.doubleValue()));
+
         new Thread(filterTask).start();
     }
 
     @FXML
-    void cancelApplyFilter(ActionEvent event) {
-        System.out.println("Cancel pressed");
+    private void cancelApplyFilter(ActionEvent event) {
+        filterTask.cancel();
     }
+
+    /**
+     * Asigna el objeto Tab y establece el EventHandler setOnClosed.
+     * El método setOnClosed permite que el Task está cancelado cuando el tab esté cerrado.
+     *
+     * @param tab - contiene la información sobre el archivo y los filtros aplicados que corresponde con this.filterTask.
+     */
+    public void setTab(Tab tab) {
+        this.tab = tab;
+        tab.setOnClosed(e -> filterTask.cancel());
+    }
+
+
 }
