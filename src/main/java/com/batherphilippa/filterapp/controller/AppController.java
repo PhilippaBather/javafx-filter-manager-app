@@ -10,9 +10,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -21,7 +25,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.batherphilippa.filterapp.constants.Constants.FXML_FILE_PATH;
+import static com.batherphilippa.filterapp.constants.Constants.*;
 import static com.batherphilippa.filterapp.filter.FilterType.*;
 
 public class AppController implements Initializable {
@@ -109,6 +113,15 @@ public class AppController implements Initializable {
     @FXML
     void openLogHistoryFile(ActionEvent event) {
         System.out.println("Menu item open log history clicked.");
+        Desktop desktop = Desktop.getDesktop();
+        File logFile = new File(IMAGE_FILE_PATH + LOG_FILE_NAME + LOG_FILE_TYPE_TXT);
+        if (logFile.exists()) {
+            try {
+                desktop.open(logFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @FXML

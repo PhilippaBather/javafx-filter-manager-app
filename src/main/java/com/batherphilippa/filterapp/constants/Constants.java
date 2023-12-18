@@ -7,6 +7,8 @@ public class Constants {
     public static final String IMAGE_FILE_NAME_SUFFIX_TEMP = "_temp";
     public static final String IMAGE_FILE_PATH = "C:/Users/bathe/OneDrive/Pictures/FilteredImages/";
     public static final String IMAGE_FILE_TYPE_PNG = ".png";
+    public static final String LOG_FILE_NAME = "log";
+    public static final String LOG_FILE_TYPE_TXT = ".txt";
 
     public static final int MIN_RGB_VALUE = 0;
     public static final int MAX_RGB_VALUE = 255;

@@ -2,6 +2,8 @@ package com.batherphilippa.filterapp.task;
 
 import com.batherphilippa.filterapp.filter.FilterUtils;
 import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
+import javafx.scene.control.Alert;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -16,6 +18,7 @@ public class FilterTask extends Task<Integer> {
     private File file;
     private File tempFile;
     private List<String> selectedFilters;
+    private FileWriterTask fileWriterTask;
 
     public FilterTask(File file, File tempFile, List<String> selectedFilters) {
         this.file = file;
@@ -30,11 +33,17 @@ public class FilterTask extends Task<Integer> {
             bufferedImage = ImageIO.read(file);
             applyFilter(bufferedImage);
             ImageIO.write(bufferedImage, "png", tempFile);
-            System.out.println("In call method");
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    protected void succeeded() {
+        super.succeeded();
+        fileWriterTask = new FileWriterTask(file, tempFile, selectedFilters);
+        new Thread(fileWriterTask).start();
     }
 
     private BufferedImage applyFilter(BufferedImage bufferedImage) {

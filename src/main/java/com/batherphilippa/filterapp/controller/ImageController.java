@@ -45,6 +45,7 @@ public class ImageController implements Initializable {
         File tempFile = new File(newName);
         filterTask = new FilterTask(file, tempFile, selectedFilters);
 
+        // TODO - refactor and override methods in FilterTask
         filterTask.stateProperty().addListener(((observableValue, state, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -84,6 +85,4 @@ public class ImageController implements Initializable {
         this.tab = tab;
         tab.setOnClosed(e -> filterTask.cancel());
     }
-
-
 }
