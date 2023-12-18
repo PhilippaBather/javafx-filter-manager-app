@@ -112,7 +112,6 @@ public class AppController implements Initializable {
 
     @FXML
     void openLogHistoryFile(ActionEvent event) {
-        System.out.println("Menu item open log history clicked.");
         Desktop desktop = Desktop.getDesktop();
         File logFile = new File(IMAGE_FILE_PATH + LOG_FILE_NAME + LOG_FILE_TYPE_TXT);
         if (logFile.exists()) {
