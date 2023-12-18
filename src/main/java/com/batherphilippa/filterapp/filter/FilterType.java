@@ -1,5 +1,10 @@
 package com.batherphilippa.filterapp.filter;
 
+/**
+ * FilterType - constantes de los nombres de filtros.
+ *
+ * @author Philippa Bather
+ */
 public class FilterType {
 
     public static final String GREY_SCALE = "Escala de Grises";
