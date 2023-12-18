@@ -3,12 +3,21 @@ package com.batherphilippa.filterapp.filter;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static com.batherphilippa.filterapp.constants.Constants.*;
+import static com.batherphilippa.filterapp.constants.FilterConstants.*;
 
-// TODO - comments in Spanish
-
+/**
+ * FilterUtils - utiles para manejar y aplicar los filtros en las imagenes.
+ *
+ * @author Philippa Bather
+ */
 public class FilterUtils {
 
+    /**
+     * Aplica el filtro de escala de grises
+     * @param bufferedImage - para filtrar
+     * @param i - iteración vertical
+     * @param j - iteración horizontal
+     */
     public static void setGreyScale(BufferedImage bufferedImage, int i, int j) {
 
         Color color = new Color(bufferedImage.getRGB(j, i));
@@ -23,6 +32,12 @@ public class FilterUtils {
         bufferedImage.setRGB(j, i, newColor.getRGB());
     }
 
+    /**
+     * Aplica el filtro de inversión de color
+     * @param bufferedImage - para filtrar
+     * @param i - iteración vertical
+     * @param j - iteración horizontal
+     */
     public static void setColourInversion(BufferedImage bufferedImage, int i, int j) {
         Color color = new Color(bufferedImage.getRGB(j, i));
 
@@ -34,6 +49,12 @@ public class FilterUtils {
         bufferedImage.setRGB(j, i, newColor.getRGB());
     }
 
+    /**
+     * Aplica el filtro de aumento de brillo
+     * @param bufferedImage - para filtrar
+     * @param i - iteración vertical
+     * @param j - iteración horizontal
+     */
     public static void setIncreasedBrightness(BufferedImage bufferedImage, int i, int j) {
         Color color = new Color(bufferedImage.getRGB(j, i));
 
@@ -45,6 +66,11 @@ public class FilterUtils {
         bufferedImage.setRGB(j, i, newColor.getRGB());
     }
 
+    /**
+     * Trunca el valor de pixel para que esté en el rango de pixels.
+     * @param value de pixel para comprobra
+     * @return valor de pixel
+     */
     private static int truncateColourValue(int value) {
 
         if (value < MIN_RGB_VALUE) {
@@ -56,13 +82,20 @@ public class FilterUtils {
         return value;
     }
 
+    /**
+     * Aplica el filtro d diminado de la imagén
+     * @param img - para filtrar
+     * @param x - iteración vertical
+     * @param y - iteración horizontal
+     */
     public static void setBlur(BufferedImage img, int x, int y) {
-        int r = 0, g = 0, b = 0;  // channels: red (r), green (g), and blue (b)
+        int r = 0, g = 0, b = 0;  // canales: rojo (r), verde (g) y azul (b)
 
-        int rgb = 2 * (img.getRGB(x + 1, y + 1));  // note: 0xFF leaves only the least significant byte
-        r += ((rgb >> 16) & 0xFF); // bitwise shift operation to get the right most byte, third rightmost byte (red)
-        g += (rgb >> 8) & 0xFF; // bitwise shift operation to get the right most byte, second rightmost byte (green)
-        b += (rgb & 0xFF); // bitwise shift operation to get the right most byte, first rightmost byte (green)
+        int rgb = 2 * (img.getRGB(x + 1, y + 1));
+        //0xFF deja la última byte menos importante
+        r += ((rgb >> 16) & 0xFF); // operación de desplazamiento bit a bit: coge el byte más a la derecha - el tercero más a la derecha (rojo)
+        g += (rgb >> 8) & 0xFF; // operación de desplazamiento bit a bit: coge el byte más a la derecha - el segundo más a la derecha (verde)
+        b += (rgb & 0xFF); // operación de desplazamiento bit a bit: coge el byte más a la derecha - el primero más a la derecha (azul)
 
         rgb += (img.getRGB(x + 1, y));
         r += ((rgb >> 16) & 0xFF);
