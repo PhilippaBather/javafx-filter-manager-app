@@ -8,6 +8,10 @@ package com.batherphilippa.filterapp.constants;
 public class MessageConstants {
 
     public static String BTN_PROCESS_TERMINATED = "Process Terminated";
+    public static String CONSOLE_MSG_APP_INITIALISATION = "Initialising the application...";
+    public static String CONSOLE_MSG_APP_TERMINATING = "Terminating the application...";
+    public static String CONSOLE_MSG_LOG_UNABLE_WRITE_FILE = "Unable to write to log file";
+    public static String CONSOLE_MSG_LOG_UPDATED = "Log file updated successfully.";
     public static String FILTER_NOT_RECOGNISED = "Filter not recognised";
     public static String FILTER_BLUR_APPLIED = "Processing...\tdifuminado de la imagen";
     public static String FILTER_COMPLETED = " Completado";
