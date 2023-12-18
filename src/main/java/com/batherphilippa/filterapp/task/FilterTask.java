@@ -1,6 +1,7 @@
 package com.batherphilippa.filterapp.task;
 
 import com.batherphilippa.filterapp.filter.FilterUtils;
+import com.batherphilippa.filterapp.utils.NotificationUtils;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 
@@ -58,25 +59,16 @@ public class FilterTask extends Task<BufferedImage> {
         FileWriterTask fileWriterTask = new FileWriterTask(file, tempFile, selectedFilters);
         new Thread(fileWriterTask).start();
 
-        String msg = "Filtro aplicado a una copia de";
-        showInformationAlert(msg);
+        String msg = String.format("Filtro aplicado a una copia de %s", file.getName());
+        NotificationUtils.showAlertDialog(msg, Alert.AlertType.INFORMATION);
     }
 
     @Override
     protected void cancelled() {
         super.cancelled();
-
-        String msg = "Filtro cancelado para el archivo";
-        showInformationAlert(msg);
+        String msg = String.format("Filtro cancelado para el archivo %s", file.getName());
+        NotificationUtils.showAlertDialog(msg, Alert.AlertType.INFORMATION);
     }
-
-    private void showInformationAlert(String msg) {
-        String msgStr = msg.concat(" ").concat(file.getName());
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(msgStr);
-        alert.show();
-    }
-
     private BufferedImage applyFilter(BufferedImage bufferedImage) {
 
         int index = 0;

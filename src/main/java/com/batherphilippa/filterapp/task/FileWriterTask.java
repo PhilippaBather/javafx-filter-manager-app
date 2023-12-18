@@ -1,6 +1,7 @@
 package com.batherphilippa.filterapp.task;
 
 import com.batherphilippa.filterapp.utils.FileUtils;
+import com.batherphilippa.filterapp.utils.NotificationUtils;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 
@@ -20,7 +21,6 @@ public class FileWriterTask extends Task<Integer> {
     private File file;
     private File tempFile;
     private List<String> selectedFilters;
-    private File logFile;
 
     public FileWriterTask(File file, File tempFile, List<String> selectedFilters) {
         this.file = file;
@@ -35,14 +35,13 @@ public class FileWriterTask extends Task<Integer> {
         if (hasFile) {
             writeToLog();
         } else {
-            logFile = FileUtils.returnNewFile(IMAGE_FILE_PATH, LOG_FILE_NAME, LOG_FILE_TYPE_TXT);
+            File logFile = FileUtils.returnNewFile(IMAGE_FILE_PATH, LOG_FILE_NAME, LOG_FILE_TYPE_TXT);
             boolean isCreated = logFile.createNewFile();
             if (isCreated) {
                 writeToLog();
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("No fue posible a actualizar el historial.");
-                alert.show();
+                String msg = "No fue posible actualizar el historial.";
+                NotificationUtils.showAlertDialog(msg, Alert.AlertType.ERROR);
             }
         }
 
