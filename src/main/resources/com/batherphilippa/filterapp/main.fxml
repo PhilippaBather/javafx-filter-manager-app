@@ -8,7 +8,7 @@
    <children>
       <MenuBar>
         <menus>
-          <Menu fx:id="menusettings" mnemonicParsing="false" text="Settings">
+          <Menu fx:id="menusettings" mnemonicParsing="false" text="Ajustes">
             <items>
               <MenuItem fx:id="menuItemSelectPath" mnemonicParsing="false" onAction="#goToSelectPathView" text="Elige Path" />
                   <MenuItem fx:id="menuItemLogHistory" mnemonicParsing="false" onAction="#openLogHistoryFile" text="Historial" />
@@ -23,7 +23,7 @@
          <toggleGroup>
             <ToggleGroup fx:id="fileSelection" />
          </toggleGroup></RadioButton>
-      <RadioButton fx:id="radBtnMultipleFiles" layoutX="139.0" layoutY="117.0" mnemonicParsing="false" onAction="#handleFileSelection" prefHeight="17.0" prefWidth="135.0" text="Archivos multiples" textFill="#400772" toggleGroup="$fileSelection" />
+      <RadioButton fx:id="radBtnMultipleFiles" layoutX="139.0" layoutY="117.0" mnemonicParsing="false" onAction="#handleFileSelection" prefHeight="17.0" prefWidth="135.0" text="Archivos múltiples" textFill="#400772" toggleGroup="$fileSelection" />
       <Label layoutX="332.0" layoutY="83.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Elige Filtro(s)" textFill="#400772" />
       <ListView fx:id="lvFilterSelection" layoutX="458.0" layoutY="83.0" prefHeight="96.0" prefWidth="200.0" />
       <TabPane fx:id="tpFilterTabManager" layoutX="44.0" layoutY="208.0" prefHeight="200.0" prefWidth="541.0" tabClosingPolicy="UNAVAILABLE" />
