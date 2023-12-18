@@ -2,6 +2,8 @@ package com.batherphilippa.filterapp.constants;
 
 /**
  * FileConstants - constantes para archivos
+ *
+ * @author Philippa Bather
  */
 public class FileConstants {
 

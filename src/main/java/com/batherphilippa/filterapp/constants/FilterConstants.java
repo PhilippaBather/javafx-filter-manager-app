@@ -3,7 +3,7 @@ package com.batherphilippa.filterapp.constants;
 /**
  * FilterConstants - constantes para los filtros
  *
- * author Philippa Bather
+ * @author Philippa Bather
  */
 public class FilterConstants {
 

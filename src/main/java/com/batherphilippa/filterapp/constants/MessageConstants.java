@@ -3,7 +3,7 @@ package com.batherphilippa.filterapp.constants;
 /**
  * MessageConstants - constantes para los mensajes y notificaciónes de la interfaz.
  *
- * author Philippa Bather
+ * @author Philippa Bather
  */
 public class MessageConstants {
 
