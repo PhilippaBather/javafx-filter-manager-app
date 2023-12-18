@@ -2,23 +2,23 @@ package com.batherphilippa.filterapp.task;
 
 import com.batherphilippa.filterapp.filter.FilterUtils;
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 import javafx.scene.control.Alert;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static com.batherphilippa.filterapp.filter.FilterType.*;
 
-public class FilterTask extends Task<Integer> {
+public class FilterTask extends Task<BufferedImage> {
 
-    private File file;
+    private final File file;
     private File tempFile;
-    private List<String> selectedFilters;
-    private FileWriterTask fileWriterTask;
+    private final List<String> selectedFilters;
 
     public FilterTask(File file, File tempFile, List<String> selectedFilters) {
         this.file = file;
@@ -27,8 +27,9 @@ public class FilterTask extends Task<Integer> {
     }
 
     @Override
-    protected Integer call() {
+    protected BufferedImage call() {
         BufferedImage bufferedImage;
+
         try {
             bufferedImage = ImageIO.read(file);
             applyFilter(bufferedImage);
@@ -36,14 +37,44 @@ public class FilterTask extends Task<Integer> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // elimina el archivo temporal si un proceso está cancelado
+        if (isCancelled()) {
+            System.out.println("Task cancelled; deleting temporary file.");
+            try {
+                Files.deleteIfExists(Paths.get(tempFile.toURI()));
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
+
         return null;
     }
 
     @Override
     protected void succeeded() {
         super.succeeded();
-        fileWriterTask = new FileWriterTask(file, tempFile, selectedFilters);
+
+        FileWriterTask fileWriterTask = new FileWriterTask(file, tempFile, selectedFilters);
         new Thread(fileWriterTask).start();
+
+        String msg = "Filtro aplicado a una copia de";
+        showInformationAlert(msg);
+    }
+
+    @Override
+    protected void cancelled() {
+        super.cancelled();
+
+        String msg = "Filtro cancelado para el archivo";
+        showInformationAlert(msg);
+    }
+
+    private void showInformationAlert(String msg) {
+        String msgStr = msg.concat(" ").concat(file.getName());
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText(msgStr);
+        alert.show();
     }
 
     private BufferedImage applyFilter(BufferedImage bufferedImage) {
@@ -63,6 +94,7 @@ public class FilterTask extends Task<Integer> {
         return bufferedImage;
     }
 
+    // métodos y búcles for diferentes para manejar y especificar el mensaje para cada proceso
     private void greyScaleImage(BufferedImage bufferedImage) {
         double progress;
         double totalSize = bufferedImage.getHeight() * bufferedImage.getWidth();
@@ -136,33 +168,23 @@ public class FilterTask extends Task<Integer> {
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         }
-        updateMessage(INCREASED_BRIGHTNESS + ": 100%");
+        updateMessage(INCREASED_BRIGHTNESS + " Completado");
     }
 
     private void blurImage(BufferedImage bufferedImage) {
-        double progress;
-        double totalSize = bufferedImage.getHeight() - 2 * bufferedImage.getWidth() - 2;
-        double totalRead = 0d;
         try {
+            // indica que el difuminado está en proceso
+            updateMessage("Processing...\tdifuminado de la imagen");
             for (int y = 0; y < bufferedImage.getHeight() - 2; y++) {
                 Thread.sleep(5);
                 for (int x = 0; x < bufferedImage.getWidth() - 2; x++) {
                     FilterUtils.setBlur(bufferedImage, x, y);
-
-                    // TODO - resolve problem with the progress bar
-                    progress = totalRead / totalSize;
-                    updateProgress(progress, 1);
-
-                    String msg = String.format("%s: ", BLUR);
-                    updateMessage(Math.round(100 * progress) + "%");
-                    totalRead = (y + 1) * (x + 1);
                 }
             }
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         }
-        updateMessage(BLUR + ": 100%");
+        updateMessage(BLUR + " Completado");
     }
-
 }
 
