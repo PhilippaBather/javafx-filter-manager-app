@@ -17,7 +17,7 @@ import java.util.List;
 import static com.batherphilippa.filterapp.constants.FileConstants.*;
 import static com.batherphilippa.filterapp.constants.MessageConstants.*;
 
-public class FileWriterTask extends Task<Integer> {
+public class FileWriterTask extends Task<File> {
 
     private final File file;
     private final File tempFile;
@@ -30,7 +30,7 @@ public class FileWriterTask extends Task<Integer> {
     }
 
     @Override
-    protected Integer call() throws Exception {
+    protected File call() throws Exception {
         boolean hasFile = checkFileExists();
 
         if (hasFile) {
