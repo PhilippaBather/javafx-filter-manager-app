@@ -53,7 +53,7 @@ public class FileWriterTask extends Task<Integer> {
         return Files.exists(path);
     }
 
-    private void writeToLog() throws IOException, InterruptedException {
+    private void writeToLog() {
         String fileDetails = getFileDetails();
         try {
             Thread.sleep(10);
