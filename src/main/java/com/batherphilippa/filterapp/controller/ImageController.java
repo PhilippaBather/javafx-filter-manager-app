@@ -9,7 +9,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -45,17 +48,16 @@ public class ImageController implements Initializable {
         File tempFile = new File(newName);
         filterTask = new FilterTask(file, tempFile, selectedFilters);
 
-        // TODO - refactor and override methods in FilterTask
         filterTask.stateProperty().addListener(((observableValue, state, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText(String.format("Filtro aplicado a una copia de %s.", file.getName()));
-                alert.show();
+                // oculta la barra de progreso y el botón de 'Cancel' correspondiente después de la operación ha terminado
+                pbFilter.setVisible(false);
+                btCancel.setVisible(false);
             }
             if (newState == Worker.State.CANCELLED) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText(String.format("Filtro cancelado para el archivo %s.", file.getName()));
-                alert.show();
+                // indica al usuario explícitamente que la aplicación de filtrada está cancelada
+                btCancel.setText("Process Terminated");
+                btCancel.setDisable(true);
             }
         }));
 
