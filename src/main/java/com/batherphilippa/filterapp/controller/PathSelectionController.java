@@ -14,8 +14,13 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static com.batherphilippa.filterapp.constants.Constants.IMAGE_FILE_PATH;
+import static com.batherphilippa.filterapp.constants.FileConstants.IMAGE_FILE_PATH;
 
+/**
+ * PathSelectionController - maneja la seleción del path donde las imagenes están guardas.
+ *
+ * @author Philippa Bather
+ */
 public class PathSelectionController implements Initializable {
     @FXML
     private Button btnApply;
@@ -43,15 +48,22 @@ public class PathSelectionController implements Initializable {
     }
 
 
+    /**
+     * Maneja la cancelación de la selección de un path por el usuario.
+     * @param event
+     */
     @FXML
     void handleCancelPathSelection(ActionEvent event) {
         // cast: porque Window es un súper class de Stage y no hay acesso al Stage
         stage = (Stage) btnCancel.getScene().getWindow();
         pathDataSingleton.setPath(initialPathValue);
-        System.out.println("On cancel: path saved: " + pathDataSingleton.getPath());
         stage.close();
     }
 
+    /**
+     * Maneja la selección de un path por el usuario.
+     * @param event
+     */
     @FXML
     void handlePathSelection(ActionEvent event) {
         if (radBtnDefaultPath.isSelected()) {
@@ -65,6 +77,10 @@ public class PathSelectionController implements Initializable {
         }
     }
 
+    /**
+     * Maneja la confirmación de la selección de un path por el usuario.
+     * @param event click event
+     */
     @FXML
     void handleSubmit(ActionEvent event) {
         // cast: porque Window es un súper class de Stage y no hay acesso al Stage
