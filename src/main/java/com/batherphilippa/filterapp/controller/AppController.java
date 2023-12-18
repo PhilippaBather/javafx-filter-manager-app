@@ -1,5 +1,6 @@
 package com.batherphilippa.filterapp.controller;
 
+import com.batherphilippa.filterapp.constants.MessageConstants;
 import com.batherphilippa.filterapp.utils.FileUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -25,9 +26,14 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.batherphilippa.filterapp.constants.Constants.*;
+import static com.batherphilippa.filterapp.constants.FileConstants.*;
 import static com.batherphilippa.filterapp.filter.FilterType.*;
 
+/**
+ * AppController - controla las funciones principales de la aplicación; implementa Initializable
+ *
+ * @author Philippa Bather
+ */
 public class AppController implements Initializable {
 
     @FXML
@@ -60,11 +66,9 @@ public class AppController implements Initializable {
     @FXML
     private ListView<String> lvFilterSelection;
 
-    private ObservableList<String> filterOptions = FXCollections.observableArrayList(GREY_SCALE,
+    private final ObservableList<String> filterOptions = FXCollections.observableArrayList(GREY_SCALE,
             COLOR_INVERSION, INCREASED_BRIGHTNESS, BLUR);
     private List<File> files;
-
-    private Tab tab;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -73,6 +77,10 @@ public class AppController implements Initializable {
         tpFilterTabManager.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
     }
 
+    /**
+     * Maneja la selección de archivos: uno o múltiples
+     * @param event
+     */
     @FXML
     public void handleFileSelection(ActionEvent event) {
         if (radBtnOneFile.isSelected()) {
@@ -84,7 +92,7 @@ public class AppController implements Initializable {
                 files.add(file);
             }
         } else {
-            // multiples archivos elegidos
+            // múltiples archivos elegidos
             List<File> tempFiles = FileUtils.getMultipleFilesFromChooser(radBtnMultipleFiles);
             if (tempFiles != null) {
                 // para modificar la lista de archivos de forma concurrente
@@ -93,12 +101,20 @@ public class AppController implements Initializable {
         }
     }
 
-    // menu items
+    /**
+     * Cierra la aplicación.
+     * @param event
+     */
     @FXML
     void closeApp(ActionEvent event) {
         Platform.exit();
     }
 
+    /**
+     * Dirige al usuario a la pantalla para selecionar el path para guardar las imagenes
+     * @param event on menu item click
+     * @throws IOException
+     */
     @FXML
     void goToSelectPathView(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(this.getClass().getResource(FXML_FILE_PATH + "path_selection.fxml"));
@@ -110,6 +126,10 @@ public class AppController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Abre la historial de los filtros.
+     * @param event on menu item click
+     */
     @FXML
     void openLogHistoryFile(ActionEvent event) {
         Desktop desktop = Desktop.getDesktop();
@@ -123,13 +143,16 @@ public class AppController implements Initializable {
         }
     }
 
+    /**
+     * Maneja la aplicación de filtros.
+     */
     @FXML
     private void applyFilters() {
         List<String> selectedItems = lvFilterSelection.getSelectionModel().getSelectedItems();
 
         if(selectedItems.size() == 0) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("Elige filtros para continuar.");
+            alert.setContentText(MessageConstants.NOTIFICATION_INFO_CHOOSE_FILTERS);
             alert.show();
             return;
         }
@@ -153,6 +176,12 @@ public class AppController implements Initializable {
         fileSelection.getSelectedToggle().setSelected(false);
     }
 
+    /**
+     * Lanza el ImageController
+     * @param file imagen para procesar
+     * @param selectedFilters filtros para aplicar
+     * @throws IOException
+     */
     private void launchImageController(File file, List<String> selectedFilters) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_FILE_PATH + "progress_pane.fxml"));
         ImageController imageController = new ImageController(file, selectedFilters);
@@ -160,8 +189,15 @@ public class AppController implements Initializable {
         openImageTab(loader, file, imageController);
     }
 
+    /**
+     * Abre el 'tab' que corresponde a la imagen.
+     * @param loader para progress_pane.fxml
+     * @param file archivo correspondiente al tab
+     * @param imageController controller para establecer el tab
+     */
     private void openImageTab(FXMLLoader loader, File file, ImageController imageController) {
         String tabName = file.getName();
+        Tab tab;
         try {
             tab = new Tab(tabName, loader.load());
         } catch (IOException e) {
