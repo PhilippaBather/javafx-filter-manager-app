@@ -14,13 +14,14 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.batherphilippa.filterapp.constants.Constants.*;
+import static com.batherphilippa.filterapp.constants.FileConstants.*;
+import static com.batherphilippa.filterapp.constants.MessageConstants.*;
 
 public class FileWriterTask extends Task<Integer> {
 
-    private File file;
-    private File tempFile;
-    private List<String> selectedFilters;
+    private final File file;
+    private final File tempFile;
+    private final List<String> selectedFilters;
 
     public FileWriterTask(File file, File tempFile, List<String> selectedFilters) {
         this.file = file;
@@ -40,8 +41,7 @@ public class FileWriterTask extends Task<Integer> {
             if (isCreated) {
                 writeToLog();
             } else {
-                String msg = "No fue posible actualizar el historial.";
-                NotificationUtils.showAlertDialog(msg, Alert.AlertType.ERROR);
+                NotificationUtils.showAlertDialog(NOTIFICATION_INFO_LOG_NOT_UPDATED, Alert.AlertType.ERROR);
             }
         }
 
@@ -72,7 +72,7 @@ public class FileWriterTask extends Task<Integer> {
         String origFileDetails = String.format("\nArchivo original: %s; path: %s", file.getName(), file.getPath());
         String filteredFileDetails = String.format("\nVersión modificada: %s; path: %s", tempFile.getName(), tempFile.getPath());
 
-        StringBuilder filtersApplied = new StringBuilder().append("\nFiltros aplicados:\n\t");
+        StringBuilder filtersApplied = new StringBuilder().append(LOG_TITLE_FILTERS_APPLIED);
         for (String filter:
              selectedFilters) {
             filtersApplied.append(filter).append("\n\t");
@@ -88,12 +88,12 @@ public class FileWriterTask extends Task<Integer> {
     @Override
     protected void succeeded() {
         super.succeeded();
-        System.out.println("Log file updated successfully.");
+        System.out.println(CONSOLE_MSG_LOG_UPDATED);
     }
 
     @Override
     protected void failed() {
         super.failed();
-        System.out.println("Unable to write to log file");
+        System.out.println(CONSOLE_MSG_LOG_UNABLE_WRITE_FILE);
     }
 }
