@@ -1,28 +1,38 @@
 package com.batherphilippa.filterapp.controller;
 
+import com.batherphilippa.filterapp.constants.MessageConstants;
 import com.batherphilippa.filterapp.task.FilterTask;
 import com.batherphilippa.filterapp.utils.FileUtils;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Tab;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.batherphilippa.filterapp.constants.Constants.IMAGE_FILE_NAME_SUFFIX_TEMP;
+import static com.batherphilippa.filterapp.constants.FileConstants.IMAGE_FILE_NAME_SUFFIX_TEMP;
 
+/**
+ * ImageController - maneja la aplicación de FilterTasks y la presentación del
+ * panel de control indicando el estado de los filtros para cada imagen.
+ *
+ * @author Philippa Bather
+ */
 public class ImageController implements Initializable {
 
     private File file;
-    private List<String> selectedFilters;
     private FilterTask filterTask;
+    private final List<String> selectedFilters;
+    private Tab tab;
 
     @FXML
     private ProgressBar pbFilter;
@@ -32,7 +42,6 @@ public class ImageController implements Initializable {
 
     @FXML
     private Button btCancel;
-    private Tab tab;
 
 
     public ImageController(File file, List<String> selectedFilters) {
@@ -43,7 +52,8 @@ public class ImageController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String newName = FileUtils.setFileNameAndPath(file, IMAGE_FILE_NAME_SUFFIX_TEMP);
+        long ts = Timestamp.from(Instant.now()).getTime(); // para identificación más precisa
+        String newName = FileUtils.setFileNameAndPath(file, IMAGE_FILE_NAME_SUFFIX_TEMP + ts);
 
         File tempFile = new File(newName);
         filterTask = new FilterTask(file, tempFile, selectedFilters);
@@ -56,7 +66,7 @@ public class ImageController implements Initializable {
             }
             if (newState == Worker.State.CANCELLED) {
                 // indica al usuario explícitamente que la aplicación de filtrada está cancelada
-                btCancel.setText("Process Terminated");
+                btCancel.setText(MessageConstants.BTN_PROCESS_TERMINATED);
                 btCancel.setDisable(true);
             }
         }));
@@ -72,6 +82,10 @@ public class ImageController implements Initializable {
         new Thread(filterTask).start();
     }
 
+    /**
+     * Cancela la aplicación de filtros para una imagen cuando el usurio hace clic en el bóton Cancel.
+     * @param event click event
+     */
     @FXML
     private void cancelApplyFilter(ActionEvent event) {
         filterTask.cancel();
