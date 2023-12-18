@@ -1,7 +1,13 @@
 package com.batherphilippa.filterapp.domain;
 
-import static com.batherphilippa.filterapp.constants.Constants.IMAGE_FILE_PATH;
+import static com.batherphilippa.filterapp.constants.FileConstants.IMAGE_FILE_PATH;
 
+/**
+ * PathDataSingleton - singleton para manejar y guardar la selección de path del usuario para que
+ * se pueda compartir los datos entre Stages diferentes.
+ *
+ * @author Philippa Bather
+ */
 public class PathDataSingleton {
 
     private static final PathDataSingleton pathDataInstance = new PathDataSingleton();
