@@ -29,7 +29,7 @@ import static com.batherphilippa.filterapp.constants.FileConstants.IMAGE_FILE_NA
  */
 public class ImageController implements Initializable {
 
-    private File file;
+    private final File file;
     private FilterTask filterTask;
     private final List<String> selectedFilters;
     private Tab tab;
@@ -72,9 +72,7 @@ public class ImageController implements Initializable {
         }));
 
         // actualiza el mensaje del porcentaje de progreso
-        filterTask.messageProperty().addListener(((observableValue, msg, newMsg) -> {
-            lbFilterStatus.setText(newMsg);
-        }));
+        filterTask.messageProperty().addListener(((observableValue, msg, newMsg) -> lbFilterStatus.setText(newMsg)));
 
         // actualiza el estado de la barra de progreso
         filterTask.progressProperty().addListener((observableValue, number, t1) -> pbFilter.setProgress(t1.doubleValue()));

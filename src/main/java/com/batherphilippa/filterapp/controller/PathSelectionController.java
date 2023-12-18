@@ -50,7 +50,7 @@ public class PathSelectionController implements Initializable {
 
     /**
      * Maneja la cancelación de la selección de un path por el usuario.
-     * @param event
+     * @param event on click
      */
     @FXML
     void handleCancelPathSelection(ActionEvent event) {
@@ -62,7 +62,7 @@ public class PathSelectionController implements Initializable {
 
     /**
      * Maneja la selección de un path por el usuario.
-     * @param event
+     * @param event on click
      */
     @FXML
     void handlePathSelection(ActionEvent event) {

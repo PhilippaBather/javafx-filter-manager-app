@@ -79,7 +79,7 @@ public class AppController implements Initializable {
 
     /**
      * Maneja la selección de archivos: uno o múltiples
-     * @param event
+     * @param event on click
      */
     @FXML
     public void handleFileSelection(ActionEvent event) {
@@ -103,7 +103,7 @@ public class AppController implements Initializable {
 
     /**
      * Cierra la aplicación.
-     * @param event
+     * @param event on click
      */
     @FXML
     void closeApp(ActionEvent event) {
@@ -113,7 +113,6 @@ public class AppController implements Initializable {
     /**
      * Dirige al usuario a la pantalla para selecionar el path para guardar las imagenes
      * @param event on menu item click
-     * @throws IOException
      */
     @FXML
     void goToSelectPathView(ActionEvent event) throws IOException {
@@ -180,7 +179,6 @@ public class AppController implements Initializable {
      * Lanza el ImageController
      * @param file imagen para procesar
      * @param selectedFilters filtros para aplicar
-     * @throws IOException
      */
     private void launchImageController(File file, List<String> selectedFilters) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_FILE_PATH + "progress_pane.fxml"));
