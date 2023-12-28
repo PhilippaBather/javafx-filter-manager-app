@@ -16,6 +16,11 @@ import java.util.List;
 import static com.batherphilippa.filterapp.constants.MessageConstants.*;
 import static com.batherphilippa.filterapp.filter.FilterType.*;
 
+/**
+ * FilterTask - el Task para aplicar los filtros de forma concurrente; extiende Task
+ *
+ * @author Philippa Bather
+ */
 public class FilterTask extends Task<BufferedImage> {
 
     private final File file;
@@ -59,14 +64,14 @@ public class FilterTask extends Task<BufferedImage> {
         FileWriterTask fileWriterTask = new FileWriterTask(file, tempFile, selectedFilters);
         new Thread(fileWriterTask).start();
 
-        String msg = String.format("Filtro aplicado a una copia de %s", file.getName());
+        String msg = UI_FILTER_APPLIED + file.getName();
         NotificationUtils.showAlertDialog(msg, Alert.AlertType.INFORMATION);
     }
 
     @Override
     protected void cancelled() {
         super.cancelled();
-        String msg = String.format("Filtro cancelado para el archivo %s", file.getName());
+        String msg = UI_FILTER_CANCELLED_FILE_INFO + file.getName();
         NotificationUtils.showAlertDialog(msg, Alert.AlertType.INFORMATION);
     }
 
@@ -81,6 +86,7 @@ public class FilterTask extends Task<BufferedImage> {
             if (selectedFilters.get(index).equals(BLUR)) {
                 blurImage(bufferedImage);
             } else {
+                // maneja la aplicación de filtros que no son de circunvolución
                 applyStandardFilters(bufferedImage, index);
             }
             index++;
@@ -101,7 +107,7 @@ public class FilterTask extends Task<BufferedImage> {
         String filterType = selectedFilters.get(index);
         try {
             for (int i = 0; i < bufferedImage.getHeight(); i++) {
-                Thread.sleep(5);
+                Thread.sleep(20);
                 for (int j = 0; j < bufferedImage.getWidth(); j++) {
 
                     switch (filterType) {
@@ -122,30 +128,32 @@ public class FilterTask extends Task<BufferedImage> {
                 }
             }
         } catch (InterruptedException ie) {
-            ie.printStackTrace();
+            updateMessage( filterType + UI_FILTER_CANCELLED); // actualiza el mensaje y notifica al usauario
+            return; // para salir del método
         }
-        updateMessage( filterType + FILTER_COMPLETED);
+        updateMessage( filterType + UI_FILTER_COMPLETED); // actualiza el mensaje y notifica al usauario
 
     }
 
     /**
-     * Maneja la tarea para difuminado de imagén.
+     * Maneja la tarea 'difuminado de imagén' (blur filter).
      * @param bufferedImage - imagén para filtrar
      */
     private void blurImage(BufferedImage bufferedImage) {
         try {
             // indica que el difuminado está en proceso
-            updateMessage(FILTER_BLUR_APPLIED);
+            updateMessage(UI_FILTER_BLUR_APPLIED);
             for (int y = 0; y < bufferedImage.getHeight() - 2; y++) {
-                Thread.sleep(5);
+                Thread.sleep(20);
                 for (int x = 0; x < bufferedImage.getWidth() - 2; x++) {
                     FilterUtils.setBlur(bufferedImage, x, y);
                 }
             }
         } catch (InterruptedException ie) {
-            ie.printStackTrace();
+            updateMessage( UI_FILTER_BLUR_CANCELLED); // actualiza el mensaje y notifica al usauario
+            return; // para salir del método
         }
-        updateMessage(BLUR + FILTER_COMPLETED);
+        updateMessage(BLUR + UI_FILTER_COMPLETED);
     }
 }
 
