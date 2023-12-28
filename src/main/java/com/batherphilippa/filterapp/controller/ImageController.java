@@ -66,7 +66,7 @@ public class ImageController implements Initializable {
             }
             if (newState == Worker.State.CANCELLED) {
                 // indica al usuario explícitamente que la aplicación de filtrada está cancelada
-                btCancel.setText(MessageConstants.BTN_PROCESS_TERMINATED);
+                btCancel.setText(MessageConstants.UI_BTN_PROCESS_TERMINATED);
                 btCancel.setDisable(true);
             }
         }));
