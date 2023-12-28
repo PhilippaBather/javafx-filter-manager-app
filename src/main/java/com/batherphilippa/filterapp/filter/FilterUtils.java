@@ -67,8 +67,8 @@ public class FilterUtils {
     }
 
     /**
-     * Trunca el valor de pixel para que esté en el rango de pixels.
-     * @param value de pixel para comprobra
+     * Trunca el valor de pixel para que esté en el rango de pixeles.
+     * @param value de pixel
      * @return valor de pixel
      */
     private static int truncateColourValue(int value) {
@@ -83,7 +83,7 @@ public class FilterUtils {
     }
 
     /**
-     * Aplica el filtro d diminado de la imagén
+     * Aplica el filtro difuminado de la imagén
      * @param bufferedImage - imagén para filtrar
      * @param x - iteración vertical
      * @param y - iteración horizontal
