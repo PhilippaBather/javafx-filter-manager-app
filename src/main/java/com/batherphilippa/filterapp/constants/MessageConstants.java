@@ -7,7 +7,6 @@ package com.batherphilippa.filterapp.constants;
  */
 public class MessageConstants {
 
-    public static String BTN_PROCESS_TERMINATED = "Process Terminated";
     public static String CONSOLE_MSG_APP_INITIALISATION = "Initialising the application...";
     public static String CONSOLE_MSG_APP_TERMINATING = "Terminating the application...";
     public static String CONSOLE_MSG_LOG_UNABLE_WRITE_FILE = "Unable to write to log file";
@@ -15,6 +14,7 @@ public class MessageConstants {
     public static String FILTER_NOT_RECOGNISED = "Filter not recognised";
 
     // UI strings
+    public static String UI_BTN_PROCESS_TERMINATED = "Proceso Terminado";
     public static String UI_FILTER_APPLIED = "Filtro aplicado a una copia de ";
     public static String UI_FILTER_BLUR_APPLIED = "Procesando...\tdifuminado de la imagen";
     public static String UI_FILTER_BLUR_CANCELLED = "Difuminado de Imagén Cancelado.";
