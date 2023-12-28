@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 import static com.batherphilippa.filterapp.constants.FileConstants.IMAGE_FILE_PATH;
 
 /**
- * PathSelectionController - maneja la seleción del path donde las imagenes están guardas.
+ * PathSelectionController - maneja la selección del path donde las imagenes están guardas.
  *
  * @author Philippa Bather
  */
@@ -89,7 +89,7 @@ public class PathSelectionController implements Initializable {
             // guard clause: null pointer exception; mantener el path pre-seleccionado
             pathDataSingleton.setPath(initialPathValue);
         } else  {
-            // establece el nueve path
+            // establece el nuevo path
             pathDataSingleton.setPath(newPathValue);
         }
         stage.close();
