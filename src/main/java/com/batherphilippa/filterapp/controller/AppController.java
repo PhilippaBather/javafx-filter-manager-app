@@ -2,6 +2,7 @@ package com.batherphilippa.filterapp.controller;
 
 import com.batherphilippa.filterapp.constants.MessageConstants;
 import com.batherphilippa.filterapp.utils.FileUtils;
+import com.batherphilippa.filterapp.utils.NotificationUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -79,7 +80,8 @@ public class AppController implements Initializable {
 
     /**
      * Maneja la selección de archivos: uno o múltiples
-     * @param event on click
+     *
+     * @param event onClick
      */
     @FXML
     public void handleFileSelection(ActionEvent event) {
@@ -103,7 +105,8 @@ public class AppController implements Initializable {
 
     /**
      * Cierra la aplicación.
-     * @param event on click
+     *
+     * @param event onClick
      */
     @FXML
     void closeApp(ActionEvent event) {
@@ -112,6 +115,7 @@ public class AppController implements Initializable {
 
     /**
      * Dirige al usuario a la pantalla para selecionar el path para guardar las imagenes
+     *
      * @param event on menu item click
      */
     @FXML
@@ -127,6 +131,7 @@ public class AppController implements Initializable {
 
     /**
      * Abre la historial de los filtros.
+     *
      * @param event on menu item click
      */
     @FXML
@@ -149,18 +154,16 @@ public class AppController implements Initializable {
     private void applyFilters() {
         List<String> selectedItems = lvFilterSelection.getSelectionModel().getSelectedItems();
 
-        if(selectedItems.size() == 0) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText(MessageConstants.NOTIFICATION_INFO_CHOOSE_FILTERS);
-            alert.show();
+        if (selectedItems.size() == 0) {
+            NotificationUtils.showAlertDialog(MessageConstants.UI_NOTIFICATION_INFO_CHOOSE_FILTERS, Alert.AlertType.INFORMATION);
             return;
         }
 
         // CopyOnWriteArrayList es Thread Safe
-        // permite eliminar elementos de la list usando un Iterator de forma concurrente
-        Iterator<File> fileIterator = files.listIterator();
+        // permite la eliminación de elementos de la list usando un Iterator de forma concurrente
         if (files != null) {
-            while(fileIterator.hasNext()) {
+            Iterator<File> fileIterator = files.listIterator();
+            while (fileIterator.hasNext()) {
                 File file = fileIterator.next();
                 try {
                     launchImageController(file, selectedItems);
@@ -169,15 +172,21 @@ public class AppController implements Initializable {
                 }
                 files.remove(file);
             }
+        } else {
+            NotificationUtils.showAlertDialog(MessageConstants.UI_NOTIFICATION_INFO_CHOOSE_FILES, Alert.AlertType.INFORMATION);
+            return;
         }
 
         // de-seleccionar el toggle button elegido
-        fileSelection.getSelectedToggle().setSelected(false);
+        if (fileSelection.getSelectedToggle() == null) {
+            fileSelection.getSelectedToggle().setSelected(false);
+        }
     }
 
     /**
      * Lanza el ImageController
-     * @param file imagen para procesar
+     *
+     * @param file            imagen para procesar
      * @param selectedFilters filtros para aplicar
      */
     private void launchImageController(File file, List<String> selectedFilters) throws IOException {
@@ -189,8 +198,9 @@ public class AppController implements Initializable {
 
     /**
      * Abre el 'tab' que corresponde a la imagen.
-     * @param loader para progress_pane.fxml
-     * @param file archivo correspondiente al tab
+     *
+     * @param loader          para progress_pane.fxml
+     * @param file            archivo correspondiente al tab
      * @param imageController controller para establecer el tab
      */
     private void openImageTab(FXMLLoader loader, File file, ImageController imageController) {
