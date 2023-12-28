@@ -17,6 +17,11 @@ import java.util.List;
 import static com.batherphilippa.filterapp.constants.FileConstants.*;
 import static com.batherphilippa.filterapp.constants.MessageConstants.*;
 
+/**
+ * FileWriterTask - el task para escribir el historial de la aplicación de filtros a un archivo; extiende Task.
+ *
+ * @author Philippa Bather
+ */
 public class FileWriterTask extends Task<File> {
 
     private final File file;
@@ -41,22 +46,29 @@ public class FileWriterTask extends Task<File> {
             if (isCreated) {
                 writeToLog();
             } else {
-                NotificationUtils.showAlertDialog(NOTIFICATION_INFO_LOG_NOT_UPDATED, Alert.AlertType.ERROR);
+                NotificationUtils.showAlertDialog(UI_NOTIFICATION_INFO_LOG_NOT_UPDATED, Alert.AlertType.ERROR);
             }
         }
 
         return null;
     }
 
+    /**
+     * Comprueba si un archivo de historial existe.
+     * @return boolean - si existe o no
+     */
     private boolean checkFileExists() {
         Path path = Paths.get(IMAGE_FILE_PATH + LOG_FILE_NAME + LOG_FILE_TYPE_TXT);
         return Files.exists(path);
     }
 
+    /**
+     * Escribe el historial
+     */
     private void writeToLog() {
         String fileDetails = getFileDetails();
         try {
-            Thread.sleep(10);
+            Thread.sleep(15);
             Files.write(
                     Paths.get(IMAGE_FILE_PATH + LOG_FILE_NAME + LOG_FILE_TYPE_TXT),
                     fileDetails.getBytes(),
@@ -66,13 +78,17 @@ public class FileWriterTask extends Task<File> {
         }
     }
 
+    /**
+     * Coge las detalles de la aplicación de filtros y de los archivos.
+     * @return String - las detalles
+     */
     private String getFileDetails() {
         String timestamp = LocalDateTime.now().toString();
 
-        String origFileDetails = String.format("\nArchivo original: %s; path: %s", file.getName(), file.getPath());
-        String filteredFileDetails = String.format("\nVersión modificada: %s; path: %s", tempFile.getName(), tempFile.getPath());
+        String origFileDetails = String.format(USER_LOG_INFO_ORIGINAL_FILE, file.getName(), file.getPath());
+        String filteredFileDetails = String.format(USER_LOG_INFO_FILTERED_FILE, tempFile.getName(), tempFile.getPath());
 
-        StringBuilder filtersApplied = new StringBuilder().append(LOG_TITLE_FILTERS_APPLIED);
+        StringBuilder filtersApplied = new StringBuilder().append(USER_LOG_TITLE_FILTERS_APPLIED);
         for (String filter:
              selectedFilters) {
             filtersApplied.append(filter).append("\n\t");
