@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="apFilterPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="275.0" prefWidth="536.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ProgressBar fx:id="pbFilter" layoutX="51.0" layoutY="76.0" prefHeight="20.0" prefWidth="304.0" progress="0.0" />
+        <Label fx:id="lbFilterStatus" layoutX="51.0" layoutY="113.0" prefHeight="17.0" prefWidth="304.0" />
+        <Button fx:id="btCancel" layoutX="367.0" layoutY="74.0" mnemonicParsing="false" onAction="#cancelApplyFilter" text="Cancelar" />
+    </children>
+</AnchorPane>
