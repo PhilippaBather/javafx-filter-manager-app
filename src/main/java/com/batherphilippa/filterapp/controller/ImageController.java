@@ -16,6 +16,7 @@ import java.io.File;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -56,7 +57,8 @@ public class ImageController implements Initializable {
         String newName = FileUtils.setFileNameAndPath(file, IMAGE_FILE_NAME_SUFFIX_TEMP + ts);
 
         File tempFile = new File(newName);
-        filterTask = new FilterTask(file, tempFile, selectedFilters);
+        List<String> selectedFiltersCopy = new ArrayList<>(selectedFilters);
+        filterTask = new FilterTask(file, tempFile, selectedFiltersCopy);
 
         filterTask.stateProperty().addListener(((observableValue, state, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
