@@ -9,8 +9,13 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.List;
 
-import static com.batherphilippa.filterapp.constants.Constants.IMAGE_FILE_TYPE_PNG;
+import static com.batherphilippa.filterapp.constants.FileConstants.IMAGE_FILE_TYPE_PNG;
 
+/**
+ * FileUtils - utiles para manejar archivos
+ *
+ * @author Philippa Bather
+ */
 public class FileUtils {
 
     public static File getFileFromChooser(RadioButton btn) {

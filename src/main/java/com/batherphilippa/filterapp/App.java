@@ -6,21 +6,28 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import static com.batherphilippa.filterapp.constants.Constants.FXML_FILE_PATH;
+import static com.batherphilippa.filterapp.constants.FileConstants.FXML_FILE_PATH;
+import static com.batherphilippa.filterapp.constants.MessageConstants.CONSOLE_MSG_APP_INITIALISATION;
+import static com.batherphilippa.filterapp.constants.MessageConstants.CONSOLE_MSG_APP_TERMINATING;
 
+/**
+ * App - la entrada a la aplicación
+ *
+ * @author Philippa Bather
+ */
 public class App extends Application {
 
     public static void main(String[] args) { launch(); }
 
     @Override
     public void init() throws Exception {
-        System.out.println("Initialising the application...");
+        System.out.println(CONSOLE_MSG_APP_INITIALISATION);
         super.init();
     }
 
     @Override
     public void stop() throws Exception {
-        System.out.println("Terminating the application...");
+        System.out.println(CONSOLE_MSG_APP_TERMINATING);
         super.stop();
     }
 
