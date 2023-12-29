@@ -125,6 +125,11 @@ public class FilterTask extends Task<BufferedImage> {
                     updateMessage(msg + Math.round(100 * progress) + "%");
 
                     totalRead = (i + 1) * (j + 1);
+
+                    if(isCancelled()) {
+                        updateMessage( filterType + UI_FILTER_CANCELLED); // actualiza el mensaje y notifica al usauario
+                        return;  // para prevenir la aplicación de otros filtros listados para esta imagén
+                    }
                 }
             }
         } catch (InterruptedException ie) {
