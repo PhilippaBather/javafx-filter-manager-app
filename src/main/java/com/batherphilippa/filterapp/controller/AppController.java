@@ -161,7 +161,7 @@ public class AppController implements Initializable {
 
         // CopyOnWriteArrayList es Thread Safe
         // permite la eliminación de elementos de la list usando un Iterator de forma concurrente
-        if (files != null) {
+        if (files != null && files.size() > 0) {
             Iterator<File> fileIterator = files.listIterator();
             while (fileIterator.hasNext()) {
                 File file = fileIterator.next();
@@ -172,14 +172,10 @@ public class AppController implements Initializable {
                 }
                 files.remove(file);
             }
+            // de-seleccionar el toggle button elegido
+            fileSelection.getSelectedToggle().setSelected(false);
         } else {
             NotificationUtils.showAlertDialog(MessageConstants.UI_NOTIFICATION_INFO_CHOOSE_FILES, Alert.AlertType.INFORMATION);
-            return;
-        }
-
-        // de-seleccionar el toggle button elegido
-        if (fileSelection.getSelectedToggle() == null) {
-            fileSelection.getSelectedToggle().setSelected(false);
         }
     }
 
