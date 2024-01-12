@@ -134,11 +134,13 @@ public class ImageController implements Initializable {
             btCancel.setText(MessageConstants.UI_BTN_PROCESS_TERMINATED);
             btCancel.setDisable(true);
             sourceBImg.flush();
-            outputBImg.flush();
+            if (outputBImg != null) {
+                outputBImg.flush();
+            }
             disableAllBtns();
+            String msg = UI_FILTER_CANCELLED_FILE_INFO + sourceFile.getName();
+            NotificationUtils.showAlertDialog(msg, Alert.AlertType.INFORMATION);
         });
-        String msg = UI_FILTER_CANCELLED_FILE_INFO + sourceFile.getName();
-        NotificationUtils.showAlertDialog(msg, Alert.AlertType.INFORMATION);
     }
 
     private void disableAllBtns() {
