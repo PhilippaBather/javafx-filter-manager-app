@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="apFilterPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="275.0" prefWidth="536.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="apFilterPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="299.0" prefWidth="637.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <ProgressBar fx:id="pbFilter" layoutX="51.0" layoutY="76.0" prefHeight="20.0" prefWidth="304.0" progress="0.0" />
-        <Label fx:id="lbFilterStatus" layoutX="51.0" layoutY="113.0" prefHeight="17.0" prefWidth="304.0" />
-        <Button fx:id="btCancel" layoutX="367.0" layoutY="74.0" mnemonicParsing="false" onAction="#cancelApplyFilter" text="Cancelar" />
+        <ProgressBar fx:id="pbFilter" layoutX="38.0" layoutY="217.0" prefHeight="20.0" prefWidth="352.0" progress="0.0" />
+        <Label fx:id="lbFilterStatus" layoutX="38.0" layoutY="194.0" prefHeight="17.0" prefWidth="304.0" />
+        <Button fx:id="btCancel" layoutX="483.0" layoutY="215.0" mnemonicParsing="false" onAction="#cancelApplyFilter" text="Cancelar" />
+        <ImageView fx:id="imgVwSource" fitHeight="150.0" fitWidth="142.0" layoutX="43.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="imgVwOutput" fitHeight="150.0" fitWidth="142.0" layoutX="244.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+        <Button fx:id="btnApply" layoutX="38.0" layoutY="252.0" mnemonicParsing="false" onAction="#applyFilter" text="Aplicar" />
+        <Button fx:id="btnUndo" layoutX="105.0" layoutY="252.0" mnemonicParsing="false" onAction="#undoFilter" text="Deshacer" />
+        <Button fx:id="btnRedo" layoutX="185.0" layoutY="252.0" mnemonicParsing="false" onAction="#redoFilter" text="Rehacer" />
+        <Button fx:id="btnSave" layoutX="258.0" layoutY="252.0" mnemonicParsing="false" onAction="#saveFilteredFile" text="Guardar" />
+        <ListView fx:id="listVwFilters" layoutX="414.0" layoutY="75.0" prefHeight="96.0" prefWidth="200.0" />
     </children>
 </AnchorPane>
