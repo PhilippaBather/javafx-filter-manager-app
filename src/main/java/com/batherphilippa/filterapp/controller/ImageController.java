@@ -8,9 +8,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -55,7 +59,6 @@ public class ImageController implements Initializable {
     private ProgressBar pbFilter;
 
 
-
     public ImageController(File file, List<String> selectedFilters) {
         this.file = file;
         this.selectedFilters = selectedFilters;
@@ -66,6 +69,9 @@ public class ImageController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         long ts = Timestamp.from(Instant.now()).getTime(); // para identificación más precisa
         String newName = FileUtils.setFileNameAndPath(file, IMAGE_FILE_NAME_SUFFIX_TEMP + ts);
+
+        // establecer la imagen original en el ImageView del tab
+        setSourceImageView();
 
         File tempFile = new File(newName);
         List<String> selectedFiltersCopy = new ArrayList<>(selectedFilters);
@@ -93,6 +99,16 @@ public class ImageController implements Initializable {
         new Thread(filterTask).start();
     }
 
+    private void setSourceImageView() {
+        InputStream stream;
+        try {
+            stream = new FileInputStream(file.getAbsoluteFile());
+            Image image = new Image(stream);
+            imgVwSource.setImage(image);
+        } catch (FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+        }
+    }
     @FXML
     void applyFilter(ActionEvent event) {
         // TODO
@@ -101,6 +117,7 @@ public class ImageController implements Initializable {
 
     /**
      * Cancela la aplicación de filtros para una imagen cuando el usurio hace clic en el bóton Cancel.
+     *
      * @param event click event
      */
     @FXML
