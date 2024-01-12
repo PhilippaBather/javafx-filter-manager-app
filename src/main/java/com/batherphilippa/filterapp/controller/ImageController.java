@@ -1,9 +1,11 @@
 package com.batherphilippa.filterapp.controller;
 
 import com.batherphilippa.filterapp.constants.MessageConstants;
+import com.batherphilippa.filterapp.task.FileWriterTask;
 import com.batherphilippa.filterapp.task.FilterTask;
 import com.batherphilippa.filterapp.utils.FileUtils;
-import javafx.concurrent.Worker;
+import com.batherphilippa.filterapp.utils.NotificationUtils;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,10 +13,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -23,6 +24,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.batherphilippa.filterapp.constants.FileConstants.IMAGE_FILE_NAME_SUFFIX_TEMP;
+import static com.batherphilippa.filterapp.constants.MessageConstants.UI_FILTER_APPLIED;
+import static com.batherphilippa.filterapp.constants.MessageConstants.UI_FILTER_CANCELLED_FILE_INFO;
 
 /**
  * ImageController - maneja la aplicación de FilterTasks y la presentación del
@@ -32,8 +35,11 @@ import static com.batherphilippa.filterapp.constants.FileConstants.IMAGE_FILE_NA
  */
 public class ImageController implements Initializable {
 
-    private final File file;
+    private BufferedImage outputBImg;
+    private BufferedImage sourceBImg;
+    private final File sourceFile;
     private FilterTask filterTask;
+    private Image workingImage; // TODO - working image
     private final List<String> selectedFilters;
     private Tab tab;
 
@@ -59,36 +65,21 @@ public class ImageController implements Initializable {
     private ProgressBar pbFilter;
 
 
-    public ImageController(File file, List<String> selectedFilters) {
-        this.file = file;
+    public ImageController(File sourceFile, List<String> selectedFilters) {
+        this.sourceFile = sourceFile;
         this.selectedFilters = selectedFilters;
         this.tab = new Tab();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        long ts = Timestamp.from(Instant.now()).getTime(); // para identificación más precisa
-        String newName = FileUtils.setFileNameAndPath(file, IMAGE_FILE_NAME_SUFFIX_TEMP + ts);
 
-        // establecer la imagen original en el ImageView del tab
-        setSourceImageView();
+        renderSourceImageInTabPane();
+        disableAllBtns();
 
-        File tempFile = new File(newName);
+        setSourceBImage();
         List<String> selectedFiltersCopy = new ArrayList<>(selectedFilters);
-        filterTask = new FilterTask(file, tempFile, selectedFiltersCopy);
-
-        filterTask.stateProperty().addListener(((observableValue, state, newState) -> {
-            if (newState == Worker.State.SUCCEEDED) {
-                // oculta la barra de progreso y el botón de 'Cancel' correspondiente después de la operación ha terminado
-                pbFilter.setVisible(false);
-                btCancel.setVisible(false);
-            }
-            if (newState == Worker.State.CANCELLED) {
-                // indica al usuario explícitamente que la aplicación de filtrada está cancelada
-                btCancel.setText(MessageConstants.UI_BTN_PROCESS_TERMINATED);
-                btCancel.setDisable(true);
-            }
-        }));
+        filterTask = new FilterTask(sourceBImg, selectedFiltersCopy);
 
         // actualiza el mensaje del porcentaje de progreso
         filterTask.messageProperty().addListener(((observableValue, msg, newMsg) -> lbFilterStatus.setText(newMsg)));
@@ -96,19 +87,67 @@ public class ImageController implements Initializable {
         // actualiza el estado de la barra de progreso
         filterTask.progressProperty().addListener((observableValue, number, t1) -> pbFilter.setProgress(t1.doubleValue()));
 
+        setSucceededActions();
+        setCancelledActions();
+
         new Thread(filterTask).start();
     }
 
-    private void setSourceImageView() {
+    private void renderSourceImageInTabPane() {
         InputStream stream;
         try {
-            stream = new FileInputStream(file.getAbsoluteFile());
+            stream = new FileInputStream(sourceFile.getAbsoluteFile());
             Image image = new Image(stream);
             imgVwSource.setImage(image);
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
         }
     }
+
+    private void setSourceBImage() {
+        try {
+            sourceBImg = ImageIO.read(sourceFile);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    private void setSucceededActions() {
+        filterTask.setOnSucceeded(event -> {
+            outputBImg = filterTask.getValue();
+            sourceBImg = outputBImg;
+
+            // Snapshots the BufferedImage; changes to BufferedImage not reflected in the Image snapshot
+            workingImage = SwingFXUtils.toFXImage(outputBImg, null); // TODO - second param: writeable image
+            imgVwOutput.setImage(workingImage);
+
+            pbFilter.setVisible(false);
+
+            btCancel.setVisible(false);
+            btnSave.setDisable(false);
+            btnUndo.setDisable(false);
+        });
+    }
+
+    private void setCancelledActions() {
+        filterTask.setOnCancelled(event -> {
+            btCancel.setText(MessageConstants.UI_BTN_PROCESS_TERMINATED);
+            btCancel.setDisable(true);
+            sourceBImg.flush();
+            outputBImg.flush();
+            disableAllBtns();
+        });
+        String msg = UI_FILTER_CANCELLED_FILE_INFO + sourceFile.getName();
+        NotificationUtils.showAlertDialog(msg, Alert.AlertType.INFORMATION);
+    }
+
+    private void disableAllBtns() {
+        btnApply.setDisable(true);
+        btnRedo.setDisable(true);
+        btnSave.setDisable(true);
+        btnUndo.setDisable(true);
+    }
+
     @FXML
     void applyFilter(ActionEvent event) {
         // TODO
@@ -126,21 +165,41 @@ public class ImageController implements Initializable {
     }
 
     @FXML
-    void redoFilter(ActionEvent event) {
+    private void redoFilter(ActionEvent event) {
         // TODO
         System.out.println("Redo filter btn clicked");
     }
 
     @FXML
-    void saveFilteredFile(ActionEvent event) {
-        // TODO
-        System.out.println("Save filtered file btn clicked");
+    private void saveFilteredFile(ActionEvent event) {
+        long ts = Timestamp.from(Instant.now()).getTime();
+        String newName = FileUtils.setFileNameAndPath(sourceFile, IMAGE_FILE_NAME_SUFFIX_TEMP + ts);
+        File outputFile = new File(newName);
+
+        try {
+            ImageIO.write(outputBImg, "png", outputFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        writeTaskToLog(outputFile);
+
+        sourceBImg.flush();
+        outputBImg.flush();
     }
 
     @FXML
-    void undoFilter(ActionEvent event) {
+    private void undoFilter(ActionEvent event) {
         // TODO
         System.out.println("Undo filter btn clicked");
+    }
+
+    private void writeTaskToLog(File outputFile) {
+        FileWriterTask fileWriterTask = new FileWriterTask(sourceFile, outputFile, selectedFilters);
+        new Thread(fileWriterTask).start();
+
+        String msg = UI_FILTER_APPLIED + sourceFile.getName();
+        NotificationUtils.showAlertDialog(msg, Alert.AlertType.INFORMATION);
     }
 
     /**
