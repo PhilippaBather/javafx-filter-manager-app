@@ -7,10 +7,8 @@ import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.Tab;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 
 import java.io.File;
 import java.net.URL;
@@ -36,13 +34,26 @@ public class ImageController implements Initializable {
     private Tab tab;
 
     @FXML
-    private ProgressBar pbFilter;
-
-    @FXML
-    private Label lbFilterStatus;
-
+    private Button btnApply;
     @FXML
     private Button btCancel;
+    @FXML
+    private Button btnRedo;
+    @FXML
+    private Button btnSave;
+    @FXML
+    private Button btnUndo;
+    @FXML
+    private ImageView imgVwSource;
+    @FXML
+    private ImageView imgVwOutput;
+    @FXML
+    private Label lbFilterStatus;
+    @FXML
+    private ListView<String> listVwFilters;
+    @FXML
+    private ProgressBar pbFilter;
+
 
 
     public ImageController(File file, List<String> selectedFilters) {
@@ -82,6 +93,12 @@ public class ImageController implements Initializable {
         new Thread(filterTask).start();
     }
 
+    @FXML
+    void applyFilter(ActionEvent event) {
+        // TODO
+        System.out.println("Apply filter btn clicked");
+    }
+
     /**
      * Cancela la aplicación de filtros para una imagen cuando el usurio hace clic en el bóton Cancel.
      * @param event click event
@@ -89,6 +106,24 @@ public class ImageController implements Initializable {
     @FXML
     private void cancelApplyFilter(ActionEvent event) {
         filterTask.cancel();
+    }
+
+    @FXML
+    void redoFilter(ActionEvent event) {
+        // TODO
+        System.out.println("Redo filter btn clicked");
+    }
+
+    @FXML
+    void saveFilteredFile(ActionEvent event) {
+        // TODO
+        System.out.println("Save filtered file btn clicked");
+    }
+
+    @FXML
+    void undoFilter(ActionEvent event) {
+        // TODO
+        System.out.println("Undo filter btn clicked");
     }
 
     /**
