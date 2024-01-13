@@ -18,7 +18,7 @@
         <menus>
           <Menu fx:id="menusettings" mnemonicParsing="false" text="Ajustes">
             <items>
-              <MenuItem fx:id="menuItemSelectPath" mnemonicParsing="false" onAction="#goToSelectPathView" text="Elige Path" />
+              <MenuItem fx:id="menuItemSelectPath" mnemonicParsing="false" onAction="#goToSelectPathView" text="Configuración" />
                   <MenuItem fx:id="menuItemLogHistory" mnemonicParsing="false" onAction="#openLogHistoryFile" text="Historial" />
                   <MenuItem fx:id="menuItemCloseApp" mnemonicParsing="false" onAction="#closeApp" text="Cerrar App" />
             </items>
