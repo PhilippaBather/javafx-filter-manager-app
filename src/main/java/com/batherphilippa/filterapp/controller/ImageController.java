@@ -5,6 +5,8 @@ import com.batherphilippa.filterapp.task.FileWriterTask;
 import com.batherphilippa.filterapp.task.FilterTask;
 import com.batherphilippa.filterapp.utils.FileUtils;
 import com.batherphilippa.filterapp.utils.NotificationUtils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,6 +28,8 @@ import java.util.ResourceBundle;
 import static com.batherphilippa.filterapp.constants.FileConstants.IMAGE_FILE_NAME_SUFFIX_TEMP;
 import static com.batherphilippa.filterapp.constants.MessageConstants.UI_FILTER_APPLIED;
 import static com.batherphilippa.filterapp.constants.MessageConstants.UI_FILTER_CANCELLED_FILE_INFO;
+import static com.batherphilippa.filterapp.filter.FilterType.*;
+import static com.batherphilippa.filterapp.filter.FilterType.BLUR;
 
 /**
  * ImageController - maneja la aplicación de FilterTasks y la presentación del
@@ -40,7 +44,7 @@ public class ImageController implements Initializable {
     private final File sourceFile;
     private FilterTask filterTask;
     private Image workingImage; // TODO - working image
-    private final List<String> selectedFilters;
+    private List<String> selectedFilters;
     private Tab tab;
 
     @FXML
@@ -63,6 +67,8 @@ public class ImageController implements Initializable {
     private ListView<String> listVwFilters;
     @FXML
     private ProgressBar pbFilter;
+    private final ObservableList<String> tbFilterOptions = FXCollections.observableArrayList(GREY_SCALE,
+            COLOR_INVERSION, INCREASED_BRIGHTNESS, BLUR);
 
 
     public ImageController(File sourceFile, List<String> selectedFilters) {
@@ -73,23 +79,10 @@ public class ImageController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        listVwFilters.setItems(tbFilterOptions);
+        listVwFilters.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         renderSourceImageInTabPane();
-        disableAllBtns();
-
-        setSourceBImage();
-        List<String> selectedFiltersCopy = new ArrayList<>(selectedFilters);
-        filterTask = new FilterTask(sourceBImg, selectedFiltersCopy);
-
-        // actualiza el mensaje del porcentaje de progreso
-        filterTask.messageProperty().addListener(((observableValue, msg, newMsg) -> lbFilterStatus.setText(newMsg)));
-        // actualiza el estado de la barra de progreso
-        filterTask.progressProperty().addListener((observableValue, number, t1) -> pbFilter.setProgress(t1.doubleValue()));
-
-        setSucceededActions();
-        setCancelledActions();
-
-        new Thread(filterTask).start();
+        applyFilters();
     }
 
     private void renderSourceImageInTabPane() {
@@ -111,6 +104,23 @@ public class ImageController implements Initializable {
         }
     }
 
+    private void applyFilters() {
+        disableAllBtns();
+        setSourceBImage();
+        List<String> selectedFiltersCopy = new ArrayList<>(selectedFilters);
+        filterTask = new FilterTask(sourceBImg, selectedFiltersCopy);
+
+        // actualiza el mensaje del porcentaje de progreso
+        filterTask.messageProperty().addListener(((observableValue, msg, newMsg) -> lbFilterStatus.setText(newMsg)));
+        // actualiza el estado de la barra de progreso
+        filterTask.progressProperty().addListener((observableValue, number, t1) -> pbFilter.setProgress(t1.doubleValue()));
+
+        setSucceededActions();
+        setCancelledActions();
+
+        new Thread(filterTask).start();
+    }
+
     private void setSucceededActions() {
         filterTask.setOnSucceeded(event -> {
             outputBImg = filterTask.getValue();
@@ -120,11 +130,14 @@ public class ImageController implements Initializable {
             workingImage = SwingFXUtils.toFXImage(outputBImg, null); // TODO - second param: writeable image
             imgVwOutput.setImage(workingImage);
 
-            pbFilter.setVisible(false);
-
-            btCancel.setVisible(false);
+            btnApply.setDisable(false);
             btnSave.setDisable(false);
             btnUndo.setDisable(false);
+            btCancel.setVisible(false);
+
+            filterTask.messageProperty().addListener(((observableValue, msg, newMsg) -> lbFilterStatus.setText(newMsg)));
+            // actualiza el estado de la barra de progreso
+            filterTask.progressProperty().addListener((observableValue, number, t1) -> pbFilter.setProgress(t1.doubleValue()));
         });
     }
 
@@ -150,22 +163,24 @@ public class ImageController implements Initializable {
     }
 
     @FXML
-    void applyFilter(ActionEvent event) {
-        // TODO
-        System.out.println("Apply filter btn clicked");
+    private void applyFilterHandler(ActionEvent event) {
+        selectedFilters = listVwFilters.getSelectionModel().getSelectedItems();
+
+        if (selectedFilters.size() == 0) {
+            NotificationUtils.showAlertDialog(MessageConstants.UI_NOTIFICATION_INFO_CHOOSE_FILTERS, Alert.AlertType.INFORMATION);
+            return;
+        }
+
+        applyFilters();
     }
 
-    /**
-     * Cancela la aplicación de filtros para una imagen cuando el usurio hace clic en el bóton Cancel.
-     *
-     * @param event click event
-     */
     @FXML
-    private void cancelApplyFilter(ActionEvent event) {
+    private void cancelFilterHandler(ActionEvent event) {
         filterTask.cancel();
     }
+
     @FXML
-    private void saveFilteredFile(ActionEvent event) {
+    private void saveFileHandler(ActionEvent event) {
         long ts = Timestamp.from(Instant.now()).getTime();
         String newName = FileUtils.setFileNameAndPath(sourceFile, IMAGE_FILE_NAME_SUFFIX_TEMP + ts);
         File outputFile = new File(newName);
@@ -183,7 +198,7 @@ public class ImageController implements Initializable {
     }
 
     @FXML
-    private void undoFilter(ActionEvent event) {
+    private void undoFilterHandler(ActionEvent event) {
         InputStream stream;
         try {
             stream = new FileInputStream(sourceFile.getAbsoluteFile());
@@ -197,8 +212,9 @@ public class ImageController implements Initializable {
             ioe.printStackTrace();
         }
     }
+
     @FXML
-    private void redoFilter(ActionEvent event) {
+    private void redoFilterHandler(ActionEvent event) {
         imgVwOutput.setImage(workingImage);
         sourceBImg = outputBImg;
         btnSave.setDisable(false);
