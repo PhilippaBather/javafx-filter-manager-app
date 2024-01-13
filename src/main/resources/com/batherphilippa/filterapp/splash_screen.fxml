@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="paneSplashScreen" prefHeight="550.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #d15ee0, #32cd32);" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text fill="#f3f0f5" layoutX="198.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 32px; -fx-font-weight: bold;" text="Filter Manager" textAlignment="CENTER" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="197.0" />
+      <Text fill="WHITE" layoutX="261.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Version 1.2" />
+   </children>
+</AnchorPane>
