@@ -1,6 +1,6 @@
 package com.batherphilippa.filterapp.utils;
 
-import com.batherphilippa.filterapp.domain.PathDataSingleton;
+import com.batherphilippa.filterapp.domain.ConfigurationDataSingleton;
 import javafx.scene.control.RadioButton;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -37,7 +37,7 @@ public class FileUtils {
     }
 
     public static String setFileNameAndPath(File file, String suffix) {
-        PathDataSingleton pathData = PathDataSingleton.getInstance();
+        ConfigurationDataSingleton pathData = ConfigurationDataSingleton.getInstance();
         String name = file.getName();
         String filename = name.substring(0, name.lastIndexOf("."));
         return new StringBuilder()
