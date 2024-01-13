@@ -21,9 +21,12 @@ public class MessageConstants {
     public static String UI_FILTER_CANCELLED = " Cancelado.";
     public static String UI_FILTER_CANCELLED_FILE_INFO = "Filtro cancelado para el archivo ";
     public static String UI_FILTER_COMPLETED = " Completado";
+    public static String UI_NOTIFICATION_ERROR_INVALID_INT_INPUT = "Introduzca un número más de 0.";
     public static String UI_NOTIFICATION_INFO_CHOOSE_FILES = "Elige un archivo/archivos para continuar";
     public static String UI_NOTIFICATION_INFO_CHOOSE_FILTERS = "Elige filtros para continuar.";
     public static String UI_NOTIFICATION_INFO_LOG_NOT_UPDATED = "No fue posible actualizar el historial.";
+    public static String UI_NOTIFICATION_INFO_MAX_FILES = " es el número máximo de archivos procesados permitido.\nSe puede cambiar el límite en Ajustes > Configuracion.";
+    public static String UI_NOTIFICATION_INFO_SELECTED_PATH = "Path elegido: ";
 
     // Log strings
     public static String USER_LOG_INFO_ORIGINAL_FILE = "\nArchivo original: %s; path: %s";
