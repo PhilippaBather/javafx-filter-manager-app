@@ -83,7 +83,6 @@ public class ImageController implements Initializable {
 
         // actualiza el mensaje del porcentaje de progreso
         filterTask.messageProperty().addListener(((observableValue, msg, newMsg) -> lbFilterStatus.setText(newMsg)));
-
         // actualiza el estado de la barra de progreso
         filterTask.progressProperty().addListener((observableValue, number, t1) -> pbFilter.setProgress(t1.doubleValue()));
 
@@ -165,13 +164,6 @@ public class ImageController implements Initializable {
     private void cancelApplyFilter(ActionEvent event) {
         filterTask.cancel();
     }
-
-    @FXML
-    private void redoFilter(ActionEvent event) {
-        // TODO
-        System.out.println("Redo filter btn clicked");
-    }
-
     @FXML
     private void saveFilteredFile(ActionEvent event) {
         long ts = Timestamp.from(Instant.now()).getTime();
@@ -192,8 +184,26 @@ public class ImageController implements Initializable {
 
     @FXML
     private void undoFilter(ActionEvent event) {
-        // TODO
-        System.out.println("Undo filter btn clicked");
+        InputStream stream;
+        try {
+            stream = new FileInputStream(sourceFile.getAbsoluteFile());
+            sourceBImg = ImageIO.read(sourceFile);
+            Image image = new Image(stream);
+            imgVwOutput.setImage(image);
+            btnSave.setDisable(false);
+            btnRedo.setDisable(false);
+            btnUndo.setDisable(true);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+    @FXML
+    private void redoFilter(ActionEvent event) {
+        imgVwOutput.setImage(workingImage);
+        sourceBImg = outputBImg;
+        btnSave.setDisable(false);
+        btnUndo.setDisable(false);
+        btnRedo.setDisable(true);
     }
 
     private void writeTaskToLog(File outputFile) {
