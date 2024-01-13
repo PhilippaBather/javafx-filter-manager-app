@@ -11,13 +11,14 @@
     <children>
         <ProgressBar fx:id="pbFilter" layoutX="38.0" layoutY="217.0" prefHeight="20.0" prefWidth="352.0" progress="0.0" />
         <Label fx:id="lbFilterStatus" layoutX="38.0" layoutY="194.0" prefHeight="17.0" prefWidth="304.0" />
-        <Button fx:id="btCancel" layoutX="483.0" layoutY="215.0" mnemonicParsing="false" onAction="#cancelApplyFilter" text="Cancelar" />
+        <Button fx:id="btCancel" layoutX="494.0" layoutY="215.0" mnemonicParsing="false" onAction="#cancelFilterHandler" text="Cancelar" />
         <ImageView fx:id="imgVwSource" fitHeight="150.0" fitWidth="142.0" layoutX="43.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
         <ImageView fx:id="imgVwOutput" fitHeight="150.0" fitWidth="142.0" layoutX="244.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
-        <Button fx:id="btnApply" layoutX="38.0" layoutY="252.0" mnemonicParsing="false" onAction="#applyFilter" text="Aplicar" />
-        <Button fx:id="btnUndo" layoutX="105.0" layoutY="252.0" mnemonicParsing="false" onAction="#undoFilter" text="Deshacer" />
-        <Button fx:id="btnRedo" layoutX="185.0" layoutY="252.0" mnemonicParsing="false" onAction="#redoFilter" text="Rehacer" />
-        <Button fx:id="btnSave" layoutX="258.0" layoutY="252.0" mnemonicParsing="false" onAction="#saveFilteredFile" text="Guardar" />
-        <ListView fx:id="listVwFilters" layoutX="414.0" layoutY="75.0" prefHeight="96.0" prefWidth="200.0" />
+        <Button fx:id="btnApply" layoutX="38.0" layoutY="252.0" mnemonicParsing="false" onAction="#applyFilterHandler" text="Aplicar" />
+        <Button fx:id="btnUndo" layoutX="105.0" layoutY="252.0" mnemonicParsing="false" onAction="#undoFilterHandler" text="Deshacer" />
+        <Button fx:id="btnRedo" layoutX="185.0" layoutY="252.0" mnemonicParsing="false" onAction="#redoFilterHandler" text="Rehacer" />
+        <Button fx:id="btnSave" layoutX="258.0" layoutY="252.0" mnemonicParsing="false" onAction="#saveFileHandler" text="Guardar" />
+      <Label layoutX="487.0" layoutY="45.0" style="-fx-font-weight: bold;" text="Añadir Filtros" textFill="#400772" />
+        <ListView fx:id="listVwFilters" layoutX="437.0" layoutY="75.0" prefHeight="96.0" prefWidth="175.0" />
     </children>
 </AnchorPane>
