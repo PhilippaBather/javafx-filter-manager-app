@@ -16,8 +16,8 @@ import static com.batherphilippa.filterapp.filter.FilterType.*;
  */
 public class FilterTask extends Task<BufferedImage> {
 
-    private final BufferedImage srcImage;
-    private final List<String> selectedFilters;
+    private BufferedImage srcImage;
+    private List<String> selectedFilters;
 
     public FilterTask(BufferedImage srcImg, List<String> selectedFilters) {
         this.srcImage = srcImg;
@@ -26,24 +26,22 @@ public class FilterTask extends Task<BufferedImage> {
 
     @Override
     protected BufferedImage call() {
-        handleFilterApplication(srcImage);
+        handleFilterApplication();
         return srcImage;
     }
 
     /**
      * Maneja la aplicación de los filtros.
-     *
-     * @param bufferedImage - imagén para filtrar
      */
-    private void handleFilterApplication(BufferedImage bufferedImage) {
+    public void handleFilterApplication() {
 
         int index = 0;
         do {
             if (selectedFilters.get(index).equals(BLUR)) {
-                blurImage(bufferedImage);
+                blurImage(srcImage);
             } else {
                 // maneja la aplicación de filtros que no son de circunvolución
-                applyStandardFilters(bufferedImage, index);
+                applyStandardFilters(srcImage, index);
             }
             index++;
         } while (index < selectedFilters.size());
