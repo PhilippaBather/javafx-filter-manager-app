@@ -1,10 +1,13 @@
 package com.batherphilippa.filterapp;
 
 import com.batherphilippa.filterapp.controller.AppController;
+import com.batherphilippa.filterapp.controller.SplashScreenController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 import static com.batherphilippa.filterapp.constants.FileConstants.FXML_FILE_PATH;
 import static com.batherphilippa.filterapp.constants.MessageConstants.CONSOLE_MSG_APP_INITIALISATION;
@@ -33,8 +36,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource(FXML_FILE_PATH + "main.fxml"));
-        loader.setController(new AppController());
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource(FXML_FILE_PATH + "splash_screen.fxml"));
+        loader.setController(new SplashScreenController());
         Scene scene = new Scene(loader.load());
         stage.setScene(scene);
         stage.show();
