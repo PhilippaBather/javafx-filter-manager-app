@@ -16,13 +16,14 @@ import java.util.ResourceBundle;
 
 import static com.batherphilippa.filterapp.constants.FileConstants.IMAGE_FILE_PATH;
 import static com.batherphilippa.filterapp.constants.MessageConstants.UI_NOTIFICATION_ERROR_INVALID_INT_INPUT;
+import static com.batherphilippa.filterapp.constants.MessageConstants.UI_NOTIFICATION_INFO_SELECTED_PATH;
 
 /**
- * AppConfigurationController - maneja la selección del path donde las imagenes están guardas.
+ * ConfigurationController - maneja la selección del path donde las imagenes están guardas.
  *
  * @author Philippa Bather
  */
-public class AppConfigurationController implements Initializable {
+public class ConfigurationController implements Initializable {
     @FXML
     private Button btnApply;
     @FXML
@@ -61,7 +62,7 @@ public class AppConfigurationController implements Initializable {
 
         if (!configurationDataSingleton.isPathDefault()) {
             radBtnChoosePath.setSelected(true);
-            lbSelectedPath.setText("Selected path: " + initialPathValue);
+            lbSelectedPath.setText(UI_NOTIFICATION_INFO_SELECTED_PATH + initialPathValue);
         }
 
         isMaxFilesSet = configurationDataSingleton.isMaxImageFiles();
