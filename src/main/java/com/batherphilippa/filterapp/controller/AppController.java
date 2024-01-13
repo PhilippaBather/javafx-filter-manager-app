@@ -1,6 +1,7 @@
 package com.batherphilippa.filterapp.controller;
 
 import com.batherphilippa.filterapp.constants.MessageConstants;
+import com.batherphilippa.filterapp.domain.ConfigurationDataSingleton;
 import com.batherphilippa.filterapp.utils.FileUtils;
 import com.batherphilippa.filterapp.utils.NotificationUtils;
 import javafx.application.Platform;
@@ -28,6 +29,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.batherphilippa.filterapp.constants.FileConstants.*;
+import static com.batherphilippa.filterapp.constants.MessageConstants.UI_NOTIFICATION_INFO_MAX_FILES;
 import static com.batherphilippa.filterapp.filter.FilterType.*;
 
 /**
@@ -70,6 +72,11 @@ public class AppController implements Initializable {
     private final ObservableList<String> filterOptions = FXCollections.observableArrayList(GREY_SCALE,
             COLOR_INVERSION, INCREASED_BRIGHTNESS, BLUR);
     private List<File> files;
+    ConfigurationDataSingleton configurationDataSingleton;
+
+    public AppController() {
+        configurationDataSingleton = ConfigurationDataSingleton.getInstance();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -95,10 +102,18 @@ public class AppController implements Initializable {
             }
         } else {
             // múltiples archivos elegidos
-            List<File> tempFiles = FileUtils.getMultipleFilesFromChooser(radBtnMultipleFiles);
-            if (tempFiles != null) {
+            List<File> files = FileUtils.getMultipleFilesFromChooser(radBtnMultipleFiles);
+
+            // comprobar si hay límite de archivos establecidos
+            int maxFiles = configurationDataSingleton.getMaxImageFiles();
+            if (configurationDataSingleton.isMaxImageFiles()) {
+                NotificationUtils.showAlertDialog(maxFiles + UI_NOTIFICATION_INFO_MAX_FILES, Alert.AlertType.INFORMATION);
+                return;
+            }
+
+            if (files != null) {
                 // para modificar la lista de archivos de forma concurrente
-                files = new CopyOnWriteArrayList<>(tempFiles);
+                this.files = new CopyOnWriteArrayList<>(files);
             }
         }
     }
@@ -120,8 +135,8 @@ public class AppController implements Initializable {
      */
     @FXML
     void goToSelectPathView(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource(FXML_FILE_PATH + "path_selection.fxml"));
-        loader.setController(new PathSelectionController());
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource(FXML_FILE_PATH + "configuration_selection.fxml"));
+        loader.setController(new ConfigurationController());
         Scene scene = new Scene(loader.load());
         Stage stage = new Stage();
         stage.setScene(scene);
