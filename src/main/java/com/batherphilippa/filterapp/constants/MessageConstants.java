@@ -27,6 +27,7 @@ public class MessageConstants {
     public static String UI_NOTIFICATION_INFO_LOG_NOT_UPDATED = "No fue posible actualizar el historial.";
     public static String UI_NOTIFICATION_INFO_MAX_FILES = " es el número máximo de archivos procesados permitido.\nSe puede cambiar el límite en Ajustes > Configuracion.";
     public static String UI_NOTIFICATION_INFO_SELECTED_PATH = "Path elegido: ";
+    public static String UI_NOTIFICATION_INFO_IMAGE_SAVED = "Guardado";
 
     // Log strings
     public static String USER_LOG_INFO_ORIGINAL_FILE = "\nArchivo original: %s; path: %s";

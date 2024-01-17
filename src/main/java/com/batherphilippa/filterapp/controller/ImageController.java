@@ -26,8 +26,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.batherphilippa.filterapp.constants.FileConstants.IMAGE_FILE_NAME_SUFFIX_TEMP;
-import static com.batherphilippa.filterapp.constants.MessageConstants.UI_FILTER_APPLIED;
-import static com.batherphilippa.filterapp.constants.MessageConstants.UI_FILTER_CANCELLED_FILE_INFO;
+import static com.batherphilippa.filterapp.constants.MessageConstants.*;
 import static com.batherphilippa.filterapp.filter.FilterType.*;
 import static com.batherphilippa.filterapp.filter.FilterType.BLUR;
 
@@ -191,6 +190,8 @@ public class ImageController implements Initializable {
             throw new RuntimeException(e);
         }
 
+        btnSave.setText(UI_NOTIFICATION_INFO_IMAGE_SAVED);
+        btnSave.setDisable(true);
         writeTaskToLog(outputFile);
 
         sourceBImg.flush();
