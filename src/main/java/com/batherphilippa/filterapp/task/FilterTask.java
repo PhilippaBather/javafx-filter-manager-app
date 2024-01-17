@@ -62,7 +62,7 @@ public class FilterTask extends Task<BufferedImage> {
         String filterType = selectedFilters.get(index);
         try {
             for (int i = 0; i < bufferedImage.getHeight(); i++) {
-                Thread.sleep(20);
+                Thread.sleep(15);
                 for (int j = 0; j < bufferedImage.getWidth(); j++) {
 
                     switch (filterType) {
@@ -105,7 +105,7 @@ public class FilterTask extends Task<BufferedImage> {
             // indica que el difuminado está en proceso
             updateMessage(UI_FILTER_BLUR_APPLIED);
             for (int y = 0; y < bufferedImage.getHeight() - 2; y++) {
-                Thread.sleep(20);
+                Thread.sleep(15);
                 for (int x = 0; x < bufferedImage.getWidth() - 2; x++) {
                     FilterUtils.setBlur(bufferedImage, x, y);
                 }
