@@ -14,6 +14,7 @@ public class MessageConstants {
     public static String FILTER_NOT_RECOGNISED = "Filter not recognised";
 
     // UI strings
+    public static String UI_BTN_CANCEL = "Cancelar";
     public static String UI_BTN_PROCESS_TERMINATED = "Proceso Terminado";
     public static String UI_FILTER_APPLIED = "Filtro aplicado a una copia de ";
     public static String UI_FILTER_BLUR_APPLIED = "Procesando...\tdifuminado de la imagen";
