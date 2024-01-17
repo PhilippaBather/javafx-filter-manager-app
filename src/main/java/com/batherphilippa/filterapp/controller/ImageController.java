@@ -49,7 +49,7 @@ public class ImageController implements Initializable {
     @FXML
     private Button btnApply;
     @FXML
-    private Button btCancel;
+    private Button btnCancel;
     @FXML
     private Button btnRedo;
     @FXML
@@ -105,6 +105,8 @@ public class ImageController implements Initializable {
 
     private void applyFilters() {
         disableAllBtns();
+        btnCancel.setDisable(false);
+        btnCancel.setText(UI_BTN_CANCEL);
         setSourceBImage();
         List<String> selectedFiltersCopy = new ArrayList<>(selectedFilters);
         filterTask = new FilterTask(sourceBImg, selectedFiltersCopy);
@@ -132,7 +134,7 @@ public class ImageController implements Initializable {
             btnApply.setDisable(false);
             btnSave.setDisable(false);
             btnUndo.setDisable(false);
-            btCancel.setVisible(false);
+            btnCancel.setVisible(false);
 
             filterTask.messageProperty().addListener(((observableValue, msg, newMsg) -> lbFilterStatus.setText(newMsg)));
             // actualiza el estado de la barra de progreso
@@ -142,8 +144,8 @@ public class ImageController implements Initializable {
 
     private void setCancelledActions() {
         filterTask.setOnCancelled(event -> {
-            btCancel.setText(MessageConstants.UI_BTN_PROCESS_TERMINATED);
-            btCancel.setDisable(true);
+            btnCancel.setText(MessageConstants.UI_BTN_PROCESS_TERMINATED);
+            btnCancel.setDisable(true);
             sourceBImg.flush();
             if (outputBImg != null) {
                 outputBImg.flush();
@@ -175,7 +177,9 @@ public class ImageController implements Initializable {
 
     @FXML
     private void cancelFilterHandler(ActionEvent event) {
+
         filterTask.cancel();
+        btnApply.setDisable(false);
     }
 
     @FXML

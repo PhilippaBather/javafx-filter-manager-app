@@ -11,7 +11,7 @@
     <children>
         <ProgressBar fx:id="pbFilter" layoutX="38.0" layoutY="217.0" prefHeight="20.0" prefWidth="352.0" progress="0.0" />
         <Label fx:id="lbFilterStatus" layoutX="38.0" layoutY="194.0" prefHeight="17.0" prefWidth="304.0" />
-        <Button fx:id="btCancel" layoutX="494.0" layoutY="215.0" mnemonicParsing="false" onAction="#cancelFilterHandler" text="Cancelar" />
+        <Button fx:id="btnCancel" layoutX="494.0" layoutY="215.0" mnemonicParsing="false" onAction="#cancelFilterHandler" text="Cancelar" />
         <ImageView fx:id="imgVwSource" fitHeight="150.0" fitWidth="142.0" layoutX="43.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
         <ImageView fx:id="imgVwOutput" fitHeight="150.0" fitWidth="142.0" layoutX="244.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
         <Button fx:id="btnApply" layoutX="38.0" layoutY="252.0" mnemonicParsing="false" onAction="#applyFilterHandler" text="Aplicar" />
