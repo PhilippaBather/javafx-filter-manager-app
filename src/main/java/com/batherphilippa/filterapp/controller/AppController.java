@@ -192,6 +192,7 @@ public class AppController implements Initializable {
         } else {
             NotificationUtils.showAlertDialog(MessageConstants.UI_NOTIFICATION_INFO_CHOOSE_FILES, Alert.AlertType.INFORMATION);
         }
+        lvFilterSelection.getSelectionModel().clearSelection();
     }
 
     /**
