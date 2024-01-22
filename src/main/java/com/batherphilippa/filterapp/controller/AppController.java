@@ -23,6 +23,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -106,8 +107,9 @@ public class AppController implements Initializable {
 
             // comprobar si hay límite de archivos establecidos
             int maxFiles = configurationDataSingleton.getMaxImageFiles();
-            if (configurationDataSingleton.isMaxImageFiles()) {
+            if (configurationDataSingleton.isMaxImageFiles() && files.size() > maxFiles) {
                 NotificationUtils.showAlertDialog(maxFiles + UI_NOTIFICATION_INFO_MAX_FILES, Alert.AlertType.INFORMATION);
+                fileSelection.getSelectedToggle().setSelected(false);
                 return;
             }
 
@@ -116,6 +118,8 @@ public class AppController implements Initializable {
                 this.files = new CopyOnWriteArrayList<>(files);
             }
         }
+        // de-seleccionar el toggle button elegido
+        fileSelection.getSelectedToggle().setSelected(false);
     }
 
     /**
@@ -167,7 +171,8 @@ public class AppController implements Initializable {
      */
     @FXML
     private void applyFilters() {
-        List<String> selectedItems = lvFilterSelection.getSelectionModel().getSelectedItems();
+        List<String> selectedItems = new ArrayList<>();
+        selectedItems.addAll(lvFilterSelection.getSelectionModel().getSelectedItems());
 
         if (selectedItems.size() == 0) {
             NotificationUtils.showAlertDialog(MessageConstants.UI_NOTIFICATION_INFO_CHOOSE_FILTERS, Alert.AlertType.INFORMATION);
@@ -187,8 +192,6 @@ public class AppController implements Initializable {
                 }
                 files.remove(file);
             }
-            // de-seleccionar el toggle button elegido
-            fileSelection.getSelectedToggle().setSelected(false);
         } else {
             NotificationUtils.showAlertDialog(MessageConstants.UI_NOTIFICATION_INFO_CHOOSE_FILES, Alert.AlertType.INFORMATION);
         }
