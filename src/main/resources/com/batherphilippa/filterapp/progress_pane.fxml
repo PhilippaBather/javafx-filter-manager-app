@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="apFilterPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="299.0" prefWidth="637.0" style="-fx-background-color: #FFFF;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="apFilterPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="299.0" prefWidth="637.0" style="-fx-background-color: #FFFF;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <ProgressBar fx:id="pbFilter" layoutX="38.0" layoutY="217.0" prefHeight="20.0" prefWidth="352.0" progress="0.0" />
         <Label fx:id="lbFilterStatus" layoutX="38.0" layoutY="194.0" prefHeight="17.0" prefWidth="304.0" />
-        <Button fx:id="btnCancel" layoutX="494.0" layoutY="215.0" mnemonicParsing="false" onAction="#cancelFilterHandler" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #d15ee0, #32cd32); -fx-font-weight: bold; -fx-border: #400772; -fx-border-width: 1;" text="Cancelar" textFill="WHITE" />
+        <Button fx:id="btnCancel" layoutX="437.0" layoutY="215.0" mnemonicParsing="false" onAction="#cancelFilterHandler" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #d15ee0, #32cd32); -fx-font-weight: bold; -fx-border: #400772; -fx-border-width: 1;" text="Cancelar" textFill="WHITE" />
         <ImageView fx:id="imgVwSource" fitHeight="150.0" fitWidth="142.0" layoutX="43.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: black; -fx-border-width: 2;" />
         <ImageView fx:id="imgVwOutput" fitHeight="150.0" fitWidth="142.0" layoutX="244.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: black; -fx-border-width: 2;" />
         <Button fx:id="btnApply" layoutX="38.0" layoutY="252.0" mnemonicParsing="false" onAction="#applyFilterHandler" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #d15ee0, #32cd32); -fx-font-weight: bold;" text="Aplicar" textFill="WHITE" />
         <Button fx:id="btnUndo" layoutX="105.0" layoutY="252.0" mnemonicParsing="false" onAction="#undoFilterHandler" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #d15ee0, #32cd32); -fx-font-weight: bold;" text="Deshacer" textFill="WHITE" />
         <Button fx:id="btnRedo" layoutX="185.0" layoutY="252.0" mnemonicParsing="false" onAction="#redoFilterHandler" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #d15ee0, #32cd32); -fx-font-weight: bold;" text="Rehacer" textFill="WHITE" />
         <Button fx:id="btnSave" layoutX="258.0" layoutY="252.0" mnemonicParsing="false" onAction="#saveFileHandler" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #d15ee0, #32cd32); -fx-font-weight: bold;" text="Guardar" textFill="WHITE" />
-      <Label layoutX="487.0" layoutY="45.0" style="-fx-font-weight: bold;" text="Añadir Filtros" textFill="#400772" />
-        <ListView fx:id="listVwFilters" layoutX="437.0" layoutY="75.0" prefHeight="96.0" prefWidth="175.0" />
+      <Label layoutX="464.0" layoutY="44.0" style="-fx-font-weight: bold;" text="Añadir Filtros" textFill="#400772" />
+        <ListView fx:id="listVwFilters" layoutX="415.0" layoutY="75.0" prefHeight="96.0" prefWidth="175.0" />
     </children>
 </AnchorPane>
