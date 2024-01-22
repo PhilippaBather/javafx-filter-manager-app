@@ -106,6 +106,10 @@ public class ConfigurationController implements Initializable {
         }
     }
 
+    /**
+     * Maneja el número máximo de imagenes para procesar.
+     * @param event - click event
+     */
     @FXML
     void handleMaxImgSelection(ActionEvent event) {
         if(radBtnDefaultMaxImg.isSelected()) {
