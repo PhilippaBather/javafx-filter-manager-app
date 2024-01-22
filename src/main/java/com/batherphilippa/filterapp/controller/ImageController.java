@@ -91,6 +91,9 @@ public class ImageController implements Initializable {
         applyFilters(sourceBImg);
     }
 
+    /**
+     * Pinta el imagén original en el tab.
+     */
     private void renderSourceImageInTabPane() {
         InputStream stream;
         try {
@@ -102,6 +105,9 @@ public class ImageController implements Initializable {
         }
     }
 
+    /**
+     * Establece el buffered image como el imagén original
+     */
     private void setSourceBImage() {
         try {
             sourceBImg = ImageIO.read(sourceFile);
@@ -110,6 +116,10 @@ public class ImageController implements Initializable {
         }
     }
 
+    /**
+     * Aplica los filtros al buffered image.
+     * @param img - imagén pasado (una copía del original o el 'output' image en el caso de que más filtros están aplicados.
+     */
     private void applyFilters(BufferedImage img) {
         disableAllBtns();
         btnCancel.setDisable(false);
@@ -128,6 +138,9 @@ public class ImageController implements Initializable {
         new Thread(filterTask).start();
     }
 
+    /**
+     * Establece las medidas cuando el task ha terminado.
+     */
     private void setSucceededActions() {
         filterTask.setOnSucceeded(event -> {
             outputBImg = filterTask.getValue();
@@ -148,6 +161,9 @@ public class ImageController implements Initializable {
         });
     }
 
+    /**
+     * Establece las medidas cuando el task ha sido cancelado.
+     */
     private void setCancelledActions() {
         filterTask.setOnCancelled(event -> {
             btnCancel.setText(MessageConstants.UI_BTN_PROCESS_TERMINATED);
@@ -162,6 +178,9 @@ public class ImageController implements Initializable {
         });
     }
 
+    /**
+     * Inhabilitar todos los botones (salvo 'Cancelar')
+     */
     private void disableAllBtns() {
         btnApply.setDisable(true);
         btnRedo.setDisable(true);
@@ -169,6 +188,10 @@ public class ImageController implements Initializable {
         btnUndo.setDisable(true);
     }
 
+    /**
+     * Maneja el botón de aplicar filtros
+     * @param event
+     */
     @FXML
     private void applyFilterHandler(ActionEvent event) {
         selectedFilters = listVwFilters.getSelectionModel().getSelectedItems();
@@ -186,12 +209,19 @@ public class ImageController implements Initializable {
         }
     }
 
+    /**
+     * Maneja el botón de cancelar filtros
+     * @param event
+     */
     @FXML
     private void cancelFilterHandler(ActionEvent event) {
         filterTask.cancel();
-//        btnApply.setDisable(false);
     }
 
+    /**
+     * Maneja el botón de guardar el imagén.
+     * @param event
+     */
     @FXML
     private void saveFileHandler(ActionEvent event) {
         long ts = Timestamp.from(Instant.now()).getTime();
@@ -212,6 +242,10 @@ public class ImageController implements Initializable {
         outputBImg.flush();
     }
 
+    /**
+     * Maneja el botón de deshacer los filtros.
+     * @param event
+     */
     @FXML
     private void undoFilterHandler(ActionEvent event) {
         InputStream stream;
@@ -230,11 +264,18 @@ public class ImageController implements Initializable {
         }
     }
 
+    /**
+     * Maneja los filtros aplicados en una lista.
+     */
     private void manageAppliedFilterList() {
         removedFilter = appliedFilters.get(0);
         appliedFilters.clear();
     }
 
+    /**
+     * Maneja el botón de rehacer un filtro.
+     * @param event
+     */
     @FXML
     private void redoFilterHandler(ActionEvent event) {
         imgVwOutput.setImage(workingImage);
@@ -246,6 +287,10 @@ public class ImageController implements Initializable {
         appliedFilters.add(removedFilter);
     }
 
+    /**
+     * Escribe el task al historial.
+     * @param outputFile
+     */
     private void writeTaskToLog(File outputFile) {
         FileWriterTask fileWriterTask = new FileWriterTask(sourceFile, outputFile, appliedFilters);
         new Thread(fileWriterTask).start();
