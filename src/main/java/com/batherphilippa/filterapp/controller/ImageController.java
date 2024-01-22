@@ -42,9 +42,10 @@ public class ImageController implements Initializable {
     private BufferedImage sourceBImg;
     private final File sourceFile;
     private FilterTask filterTask;
-    private Image workingImage; // TODO - working image
+    private Image workingImage;
     private List<String> selectedFilters;
     private Tab tab;
+    private boolean isUndone;
 
     @FXML
     private Button btnApply;
@@ -68,20 +69,26 @@ public class ImageController implements Initializable {
     private ProgressBar pbFilter;
     private final ObservableList<String> tbFilterOptions = FXCollections.observableArrayList(GREY_SCALE,
             COLOR_INVERSION, INCREASED_BRIGHTNESS, BLUR);
+    private final List<String> appliedFilters;
+    private String removedFilter;
 
 
     public ImageController(File sourceFile, List<String> selectedFilters) {
         this.sourceFile = sourceFile;
         this.selectedFilters = selectedFilters;
+        this.appliedFilters = new ArrayList<>();
+        this.appliedFilters.addAll(selectedFilters);
         this.tab = new Tab();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        isUndone = false;
         listVwFilters.setItems(tbFilterOptions);
         listVwFilters.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         renderSourceImageInTabPane();
-        applyFilters();
+        setSourceBImage();
+        applyFilters(sourceBImg);
     }
 
     private void renderSourceImageInTabPane() {
@@ -103,13 +110,12 @@ public class ImageController implements Initializable {
         }
     }
 
-    private void applyFilters() {
+    private void applyFilters(BufferedImage img) {
         disableAllBtns();
         btnCancel.setDisable(false);
         btnCancel.setText(UI_BTN_CANCEL);
-        setSourceBImage();
         List<String> selectedFiltersCopy = new ArrayList<>(selectedFilters);
-        filterTask = new FilterTask(sourceBImg, selectedFiltersCopy);
+        filterTask = new FilterTask(img, selectedFiltersCopy);
 
         // actualiza el mensaje del porcentaje de progreso
         filterTask.messageProperty().addListener(((observableValue, msg, newMsg) -> lbFilterStatus.setText(newMsg)));
@@ -128,7 +134,7 @@ public class ImageController implements Initializable {
             sourceBImg = outputBImg;
 
             // Snapshots the BufferedImage; changes to BufferedImage not reflected in the Image snapshot
-            workingImage = SwingFXUtils.toFXImage(outputBImg, null); // TODO - second param: writeable image
+            workingImage = SwingFXUtils.toFXImage(outputBImg, null);
             imgVwOutput.setImage(workingImage);
 
             btnApply.setDisable(false);
@@ -166,20 +172,24 @@ public class ImageController implements Initializable {
     @FXML
     private void applyFilterHandler(ActionEvent event) {
         selectedFilters = listVwFilters.getSelectionModel().getSelectedItems();
+        appliedFilters.addAll(selectedFilters);
 
         if (selectedFilters.size() == 0) {
             NotificationUtils.showAlertDialog(MessageConstants.UI_NOTIFICATION_INFO_CHOOSE_FILTERS, Alert.AlertType.INFORMATION);
             return;
         }
 
-        applyFilters();
+        if (!isUndone) {
+            applyFilters(outputBImg);
+        } else {
+            applyFilters(sourceBImg);
+        }
     }
 
     @FXML
     private void cancelFilterHandler(ActionEvent event) {
-
         filterTask.cancel();
-        btnApply.setDisable(false);
+//        btnApply.setDisable(false);
     }
 
     @FXML
@@ -213,9 +223,16 @@ public class ImageController implements Initializable {
             btnSave.setDisable(false);
             btnRedo.setDisable(false);
             btnUndo.setDisable(true);
+            isUndone = true;
+            manageAppliedFilterList();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+    }
+
+    private void manageAppliedFilterList() {
+        removedFilter = appliedFilters.get(0);
+        appliedFilters.clear();
     }
 
     @FXML
@@ -225,10 +242,12 @@ public class ImageController implements Initializable {
         btnSave.setDisable(false);
         btnUndo.setDisable(false);
         btnRedo.setDisable(true);
+        isUndone = false;
+        appliedFilters.add(removedFilter);
     }
 
     private void writeTaskToLog(File outputFile) {
-        FileWriterTask fileWriterTask = new FileWriterTask(sourceFile, outputFile, selectedFilters);
+        FileWriterTask fileWriterTask = new FileWriterTask(sourceFile, outputFile, appliedFilters);
         new Thread(fileWriterTask).start();
 
         String msg = UI_FILTER_APPLIED + sourceFile.getName();
