@@ -14,6 +14,9 @@ import java.util.ResourceBundle;
 
 import static com.batherphilippa.filterapp.constants.FileConstants.FXML_FILE_PATH;
 
+/**
+ * SplashScreenController - maneja el splash screen
+ */
 public class SplashScreenController implements Initializable {
 
     @FXML
@@ -24,6 +27,9 @@ public class SplashScreenController implements Initializable {
         splashScreenHandler();
     }
 
+    /**
+     * Crea un hilo para establecer un tiempo de espera para la pantalla de presentación; invoca loadAppScreen()
+     */
     public void splashScreenHandler() {
         new Thread(() -> {
             try {
@@ -35,6 +41,9 @@ public class SplashScreenController implements Initializable {
         }).start();
     }
 
+    /**
+     * Carga la pantalla principal de la aplicación.
+     */
     private void loadAppScreen(){
         Platform.runLater(new Runnable() {
             @Override
