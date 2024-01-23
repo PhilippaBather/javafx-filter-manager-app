@@ -51,7 +51,6 @@ public class ConfigurationController implements Initializable {
     private String newPathValue;
     private boolean isMaxFilesSet;
     private Stage stage;
-    private int maxFiles;
 
     ConfigurationDataSingleton configurationDataSingleton;
 
@@ -61,12 +60,14 @@ public class ConfigurationController implements Initializable {
         initialPathValue = configurationDataSingleton.getPath();
 
         if (!configurationDataSingleton.isPathDefault()) {
+            // pinta el path no por defecto/cambiado en la pantalla
             radBtnChoosePath.setSelected(true);
             lbSelectedPath.setText(UI_NOTIFICATION_INFO_SELECTED_PATH + initialPathValue);
         }
 
         isMaxFilesSet = configurationDataSingleton.isMaxImageFiles();
         if (isMaxFilesSet) {
+            // pinta el límite elegido por el usuario en la pantalla
             radBtnChooseMaxImg.setSelected(true);
             txtfldMaxImg.setText(String.valueOf(configurationDataSingleton.getMaxImageFiles()));
         }
@@ -113,6 +114,7 @@ public class ConfigurationController implements Initializable {
     @FXML
     void handleMaxImgSelection(ActionEvent event) {
         if(radBtnDefaultMaxImg.isSelected()) {
+            // por defecto: text field de max imagenes está vacío y deshabilitado
             txtfldMaxImg.setText("");
             txtfldMaxImg.setDisable(true);
             isMaxFilesSet = false;
@@ -143,12 +145,16 @@ public class ConfigurationController implements Initializable {
         if(isMaxFilesSet) {
             int maxFiles = InputUtils.validateIntegerInput(txtfldMaxImg.getText());
             if (maxFiles > 0) {
+                // establece el límite de archivos
                 configurationDataSingleton.setMaxImageFiles(maxFiles);
-                configurationDataSingleton.setMaxImageFiles(isMaxFilesSet);
+                configurationDataSingleton.setMaxImageFiles(true);
             } else {
+                // notifica al usuario si la entrada es inválida
                 txtError.setText(UI_NOTIFICATION_ERROR_INVALID_INT_INPUT);
                 return;
             }
+        } else {
+            configurationDataSingleton.setMaxImageFiles(false);
         }
 
         stage.close();

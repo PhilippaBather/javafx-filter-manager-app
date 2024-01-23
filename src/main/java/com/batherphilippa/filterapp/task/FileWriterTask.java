@@ -39,8 +39,9 @@ public class FileWriterTask extends Task<File> {
         boolean hasFile = checkFileExists();
 
         if (hasFile) {
-            writeToLog();
+            writeToLog();  // escribe al historial si existe
         } else {
+            // si no, crea el historial
             File logFile = FileUtils.returnNewFile(IMAGE_FILE_PATH, LOG_FILE_NAME, LOG_FILE_TYPE_TXT);
             boolean isCreated = logFile.createNewFile();
             if (isCreated) {
@@ -68,7 +69,7 @@ public class FileWriterTask extends Task<File> {
     private void writeToLog() {
         String fileDetails = getFileDetails();
         try {
-            Thread.sleep(15);
+            Thread.sleep(15);  // simula retardos en las tareas
             Files.write(
                     Paths.get(IMAGE_FILE_PATH + LOG_FILE_NAME + LOG_FILE_TYPE_TXT),
                     fileDetails.getBytes(),
