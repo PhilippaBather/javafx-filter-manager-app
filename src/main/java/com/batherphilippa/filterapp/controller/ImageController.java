@@ -168,11 +168,13 @@ public class ImageController implements Initializable {
         filterTask.setOnCancelled(event -> {
             btnCancel.setText(MessageConstants.UI_BTN_PROCESS_TERMINATED);
             btnCancel.setDisable(true);
+            // elimina los buffered imagenes
             sourceBImg.flush();
             if (outputBImg != null) {
                 outputBImg.flush();
             }
             disableAllBtns();
+            // notifica al usuario
             String msg = UI_FILTER_CANCELLED_FILE_INFO + sourceFile.getName();
             NotificationUtils.showAlertDialog(msg, Alert.AlertType.INFORMATION);
         });
@@ -195,13 +197,15 @@ public class ImageController implements Initializable {
     @FXML
     private void applyFilterHandler(ActionEvent event) {
         selectedFilters = listVwFilters.getSelectionModel().getSelectedItems();
-        appliedFilters.addAll(selectedFilters);
+        appliedFilters.addAll(selectedFilters);  // para mantener una lista de filtros aplicados no elegidos
 
         if (selectedFilters.size() == 0) {
+            // notifica al usuario si no ha elegido filtros
             NotificationUtils.showAlertDialog(MessageConstants.UI_NOTIFICATION_INFO_CHOOSE_FILTERS, Alert.AlertType.INFORMATION);
             return;
         }
 
+        // el buffered imagén procesado depende de si el usuario ha deshecho o no los filtros
         if (!isUndone) {
             applyFilters(outputBImg);
         } else {
@@ -224,7 +228,7 @@ public class ImageController implements Initializable {
      */
     @FXML
     private void saveFileHandler(ActionEvent event) {
-        long ts = Timestamp.from(Instant.now()).getTime();
+        long ts = Timestamp.from(Instant.now()).getTime(); // para nombrar el archivo
         String newName = FileUtils.setFileNameAndPath(sourceFile, IMAGE_FILE_NAME_SUFFIX_TEMP + ts);
         File outputFile = new File(newName);
 
@@ -234,10 +238,11 @@ public class ImageController implements Initializable {
             throw new RuntimeException(e);
         }
 
-        btnSave.setText(UI_NOTIFICATION_INFO_IMAGE_SAVED);
+        btnSave.setText(UI_NOTIFICATION_INFO_IMAGE_SAVED); // notifica al usuario
         btnSave.setDisable(true);
-        writeTaskToLog(outputFile);
+        writeTaskToLog(outputFile); // escribe el historial
 
+        // elimina los buffered imagenes
         sourceBImg.flush();
         outputBImg.flush();
     }
@@ -251,6 +256,7 @@ public class ImageController implements Initializable {
         InputStream stream;
         try {
             stream = new FileInputStream(sourceFile.getAbsoluteFile());
+            // re-establece el 'source image' como una copía del archivo original
             sourceBImg = ImageIO.read(sourceFile);
             Image image = new Image(stream);
             imgVwOutput.setImage(image);
@@ -258,6 +264,7 @@ public class ImageController implements Initializable {
             btnRedo.setDisable(false);
             btnUndo.setDisable(true);
             isUndone = true;
+            // actualiza la lista de filtros aplicados
             manageAppliedFilterList();
         } catch (IOException ioe) {
             ioe.printStackTrace();
