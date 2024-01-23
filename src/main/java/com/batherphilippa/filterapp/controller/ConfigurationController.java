@@ -51,7 +51,6 @@ public class ConfigurationController implements Initializable {
     private String newPathValue;
     private boolean isMaxFilesSet;
     private Stage stage;
-    private int maxFiles;
 
     ConfigurationDataSingleton configurationDataSingleton;
 
@@ -148,12 +147,14 @@ public class ConfigurationController implements Initializable {
             if (maxFiles > 0) {
                 // establece el límite de archivos
                 configurationDataSingleton.setMaxImageFiles(maxFiles);
-                configurationDataSingleton.setMaxImageFiles(isMaxFilesSet);
+                configurationDataSingleton.setMaxImageFiles(true);
             } else {
                 // notifica al usuario si la entrada es inválida
                 txtError.setText(UI_NOTIFICATION_ERROR_INVALID_INT_INPUT);
                 return;
             }
+        } else {
+            configurationDataSingleton.setMaxImageFiles(false);
         }
 
         stage.close();
